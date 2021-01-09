@@ -1,5 +1,6 @@
 #!/bin/sh
 
+set -eu
 docker build -t autoserver-rootfs - <<\EOF
 
 FROM ubuntu:20.04
