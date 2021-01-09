@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+trap 'exec /bin/sh' EXIT
+for x in $(/bin/busybox --list); do
+	/bin/busybox ln -s busybox "bin/$x" || :
+done
+
+mount --rbind / /new_root
+cd /new_root
+mount --move . /
+exec chroot . /init_stage2 "$@"
+false
