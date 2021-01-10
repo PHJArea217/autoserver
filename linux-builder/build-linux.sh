@@ -4,7 +4,7 @@ set -eu
 
 mkdir -p build_root/kernel-output
 [ ! -f linux.tar.xz ] && wget -O linux.tar.xz https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.5.tar.xz
-bsdtar -xf linux.tar.xz -C build_root --strip-components 1
+[ ! -f build_root/.config ] && bsdtar -xf linux.tar.xz -C build_root --strip-components 1
 cp linux_config build_root/.config
 
 unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave sh <<\EOF
