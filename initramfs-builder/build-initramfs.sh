@@ -8,7 +8,7 @@ bsdtar -xC /proc/driver/initramfs/__autoserver__/ --strip-components 1 --no-ffla
 cp initramfs-init2 /proc/driver/initramfs/init_stage2
 cp initramfs-init /proc/driver/initramfs/init
 ( cd /proc/driver/initramfs
-mkdir boot_disk dev new_root proc rofs_root sys
+mkdir boot_disk dev etc new_root proc rofs_root sys
 ln -s usr/lib lib
 ln -s usr/lib64 lib64
 ln -s usr/lib32 lib32
@@ -16,6 +16,7 @@ ln -s usr/libx32 libx32
 ln -s rofs_root/usr usr
 mv __autoserver__/busybox-s bin/busybox
 ln -s busybox bin/sh
+ln -s /rofs_root/etc/alternatives etc/alternatives
 find -print0 > ../initramfs_filelist.txt
 )
 (cd /proc/driver/initramfs && cpio -0o -H newc < ../initramfs_filelist.txt) > initrd

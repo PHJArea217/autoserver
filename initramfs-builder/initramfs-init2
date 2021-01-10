@@ -2,6 +2,9 @@
 
 set -eu
 
+[ 1 = "$$" ]
+[ ! -f /proc/version ]
+
 trap 'exec /bin/sh' EXIT
 
 mount -t proc -o nosuid,nodev,noexec none /proc

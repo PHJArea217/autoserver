@@ -1,5 +1,7 @@
 #!/bin/sh
 set -eu
+[ ! -f /proc/version ]
+[ 1 = "$$" ]
 trap 'exec /bin/sh' EXIT
 for x in $(/bin/busybox --list); do
 	/bin/busybox ln -s busybox "bin/$x" || :
