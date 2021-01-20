@@ -16,7 +16,7 @@ ln -s usr/libx32 libx32
 ln -s rofs_root/usr usr
 mv __autoserver__/busybox-s bin/busybox
 ln -s busybox bin/sh
-ln -s /rofs_root/etc/alternatives etc/alternatives
+# ln -s /rofs_root/etc/alternatives etc/alternatives
 find -print0 > ../initramfs_filelist.txt
 )
 (cd /proc/driver/initramfs && cpio -0o -H newc < ../initramfs_filelist.txt) > initrd

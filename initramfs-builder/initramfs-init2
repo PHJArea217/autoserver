@@ -24,8 +24,9 @@ while [ ! -e "$autoserver_boot_dev" ]; do
 done
 
 mount -t "${autoserver_boot_fstype:-vfat}" -o "${autoserver_boot_opts:-ro}" "$autoserver_boot_dev" "/boot_disk"
-mount -t squashfs /boot_disk/autosvr/system.img /rofs_root
+[ -e /etc/alternatives ] || ln -s /rofs_root/etc/alternatives /etc/alternatives
 mount -t squashfs /boot_disk/autosvr/k_mod.img /__autoserver__/kernel_modules
+mount -t squashfs /boot_disk/autosvr/system.img /rofs_root
 # XXX: suggest RENAME_NOREPLACE command
 /bin/busybox mv /bin /static
 trap 'exec /static/sh' EXIT

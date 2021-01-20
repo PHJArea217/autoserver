@@ -30,7 +30,7 @@ traceroute tshark u-boot-tools udev udisks2 usb-modeswitch usbmuxd util-linux vi
 wireless-regdb wireless-tools wodim wpasupplicant xserver-xorg-core xserver-xorg-input-all xserver-xorg-video-all xterm xxd xz-utils zsh && \
 rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc/ssl/private/ssl-cert-snakeoil.key /usr/bin/man
 
-RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends linux-firmware
+RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends linux-firmware build-essential make
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends isolinux syslinux syslinux-utils syslinux-common \
 gpsd gpsd-clients pps-tools bird quagga-core quagga-bgpd amd64-microcode intel-microcode conntrack unbound wireguard-tools slirp4netns \

@@ -13,7 +13,7 @@ rm -f etc/resolv.conf etc/hosts etc/hostname etc/inittab
 : > etc/hostname
 : > etc/inittab
 rm -rf usr/lib/modules usr/src/linux-headers-*
-ln -s /__autoserver__/kernel_modules usr/lib/modules
+ln -s /__autoserver__/kernel_modules/modules usr/lib/modules
 )
 # bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xattrs --chroot -f "../linux-builder/build_root/linux-output.tar.gz" lib/modules
 mv "$M_TMPDIR/lib/modules" "$M_TMPDIR/usr/lib/"
