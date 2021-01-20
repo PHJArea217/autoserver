@@ -11,6 +11,8 @@ mount -t proc -o nosuid,nodev,noexec none /proc
 mount -t sysfs -o nosuid,nodev,noexec none /sys
 mount -t devtmpfs -o nosuid,noexec none /dev
 
+[ -r /scripts/premount-script ] && . /scripts/premount-script
+
 SEQ=0
 while [ ! -e "$autoserver_boot_dev" ]; do
 	sleep 2
@@ -23,6 +25,7 @@ done
 
 mount -t "${autoserver_boot_fstype:-vfat}" -o "${autoserver_boot_opts:-ro}" "$autoserver_boot_dev" "/boot_disk"
 mount -t squashfs /boot_disk/autosvr/system.img /rofs_root
+mount -t squashfs /boot_disk/autosvr/k_mod.img /__autoserver__/kernel_modules
 # XXX: suggest RENAME_NOREPLACE command
 /bin/busybox mv /bin /static
 trap 'exec /static/sh' EXIT

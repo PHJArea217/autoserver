@@ -3,7 +3,7 @@
 set -eu
 
 mkdir -p build_root/kernel-output
-[ ! -f linux.tar.xz ] && wget -O linux.tar.xz https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.5.tar.xz
+[ ! -f linux.tar.xz ] && wget -O linux.tar.xz https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.10.9.tar.xz
 [ ! -f build_root/.config ] && bsdtar -xf linux.tar.xz -C build_root --strip-components 1
 cp linux_config build_root/.config
 
@@ -43,5 +43,10 @@ mount -t proc none proc
 export HOME=/root
 pivot_root . .
 umount -l .
-exec sh -c 'cd /build_root && make olddefconfig && make -j 5 && make INSTALL_PATH=/build_root/kernel-output install && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_root/kernel-output modules_install && bsdtar -cz -C /build_root/kernel-output -f /build_root/linux-output.tar.gz .'
+if [ "1" = "${DO_SHELL:-0}" ]; then
+	exec sh -c 'exec /bin/bash </dev/tty'
+	exit 1
+fi
+exec sh -c 'cd /build_root && make olddefconfig && make -j 5 && make INSTALL_PATH=/build_root/kernel-output install && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_root/kernel-output modules_install'
 EOF
+mksquashfs build_root/kernel-output/lib/modules k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend

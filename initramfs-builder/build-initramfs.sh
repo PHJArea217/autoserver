@@ -3,7 +3,7 @@ set -eu
 unshare -r -m --propagation=slave <<\EOF
 set -eu
 mount -t tmpfs -o mode=0755 none /proc/driver
-mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__
+mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__/kernel_modules
 bsdtar -xC /proc/driver/initramfs/__autoserver__/ --strip-components 1 --no-fflags -f - < ../busybox-builder/busybox.tar.gz
 cp initramfs-init2 /proc/driver/initramfs/init_stage2
 cp initramfs-init /proc/driver/initramfs/init
