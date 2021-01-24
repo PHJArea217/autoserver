@@ -28,7 +28,7 @@ pulseaudio-utils python python3 qemu qemu-block-extra qemu-system qemu-user qemu
 rtkit runc screen seabios sharutils socat sox squashfs-tools ssh-import-id strace sudo systemd thermald tmux \
 traceroute tshark u-boot-tools udev udisks2 usb-modeswitch usbmuxd util-linux vim-nox vsftpd wamerican wget \
 wireless-regdb wireless-tools wodim wpasupplicant xserver-xorg-core xserver-xorg-input-all xserver-xorg-video-all xterm xxd xz-utils zsh && \
-rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc/ssl/private/ssl-cert-snakeoil.key /usr/bin/man
+rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc/ssl/private/ssl-cert-snakeoil.key /usr/bin/man /sbin/switch_root
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends linux-firmware build-essential make
 
