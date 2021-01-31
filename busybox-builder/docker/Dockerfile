@@ -18,5 +18,5 @@ RUN mkdir -p /busybox-d && \
 	cp -a /busybox-d/busybox /output/busybox-d && \
 	cp -a /busybox-s/busybox /output/busybox-s
 
-RUN mkdir /c-s && cd /c-s && git clone https://git.peterjin.org/_/container-scripts && cd /c-s/container-scripts/utils && bsdtar -cJf /output/ctrtool-src.tar.xz . && make -j 4 && cp ctrtool /output/
+RUN mkdir /c-s && cd /c-s && git clone https://git.peterjin.org/_/container-scripts && cd /c-s/container-scripts/utils && bsdtar -cJf /output/ctrtool-src.tar.xz . && make -j 4 && strip ctrtool -o /output/ctrtool
 # RUN for x in container-launcher reset_cgroup mini-init container-rootfs-mount; do gcc -o /output/"$x" /output/"$x".c && strip /output/"$x" && gzip -9 /output/"$x.c"; done
