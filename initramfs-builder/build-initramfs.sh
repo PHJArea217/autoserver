@@ -17,6 +17,8 @@ ln -s rofs_root/usr usr
 mv __autoserver__/busybox-s bin/busybox
 ln -s busybox bin/sh
 # ln -s /rofs_root/etc/alternatives etc/alternatives
+mkdir etc/ld.so.conf.d
+printf '%s\n' 'include /etc/ld.so.conf.d/*.conf' /lib64 /usr/lib/x86_64-linux-gnu /usr/local/lib/x86_64-linux-gnu > etc/ld.so.conf
 find -print0 > ../initramfs_filelist.txt
 )
 (cd /proc/driver/initramfs && cpio -0o -H newc < ../initramfs_filelist.txt) > initrd

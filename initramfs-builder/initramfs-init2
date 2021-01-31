@@ -28,9 +28,9 @@ mount -t "${autoserver_boot_fstype:-vfat}" -o "${autoserver_boot_opts:-ro}" "$au
 mount -t squashfs /boot_disk/autosvr/k_mod.img /__autoserver__/kernel_modules
 mount -t squashfs /boot_disk/autosvr/system.img /rofs_root
 # XXX: suggest RENAME_NOREPLACE command
-/bin/busybox mv /bin /static
+/static/busybox ln -s usr/bin /static
+/__autoserver__/ctrtool renameat2 -x /static /bin
 trap 'exec /static/sh' EXIT
-/static/busybox ln -s usr/bin /bin
 /static/busybox ln -s usr/sbin /sbin
 exec /init_stage3
 false
