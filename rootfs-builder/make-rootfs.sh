@@ -35,5 +35,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommend
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends isolinux syslinux syslinux-utils syslinux-common \
 gpsd gpsd-clients pps-tools bird quagga-core quagga-bgpd amd64-microcode intel-microcode conntrack unbound wireguard-tools slirp4netns \
 lxc-utils
+
+RUN mv /lib/systemd/system /lib/systemd/system_dist && apt-get -y install --no-install-recommends systemd udev
 EOF
 docker run --rm -v /docker-buildout/autoserver2:/build-output autoserver-rootfs sh -c 'bsdtar -czf - /etc /usr /var > /build-output/rootfs.tar.gz'
