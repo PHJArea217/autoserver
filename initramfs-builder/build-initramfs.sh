@@ -16,6 +16,9 @@ ln -s usr/libx32 libx32
 ln -s rofs_root/usr usr
 mv __autoserver__/busybox-s bin/busybox
 ln -s busybox bin/sh
+for x in container-launcher container-rootfs-mount mini-init mount_seq reset_cgroup simple-renameat2; do
+	ln -s ctrtool "__autoserver__/$x"
+done
 # ln -s /rofs_root/etc/alternatives etc/alternatives
 find -print0 > ../initramfs_filelist.txt
 )
