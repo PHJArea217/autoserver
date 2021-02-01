@@ -1,0 +1,64 @@
+#!/bin/sh
+set -eu
+# trap 'exec /bin/sh' EXIT
+
+[ ! -d /dev/pts ]
+[ -c /dev/null ]
+
+modprobe fuse
+/__autoserver__/ctrtool mount_seq \
+-D /dev/pts -D /run -D /dev/mqueue -D /dev/__container-devices__ -M 0755 \
+-m /dev/pts -t devpts -o mode=0600 \
+-m /dev/mqueue -t mqueue \
+-m /run -t tmpfs -o mode=0755,size=100M \
+-D /run/lock -D /run/shm \
+-D /run/sshd -M 0755 \
+-D /run/syslog -M 0755 \
+-m /run/lock -t tmpfs -o size=10M \
+-m /run/shm -t tmpfs \
+-m /sys/fs/cgroup -t tmpfs -o size=1M,mode=0755 \
+-c /sys/fs/cgroup \
+-m autoserver_user -Et cgroup -o none,name=autoserver_user \
+-m blkio -Et cgroup -o blkio \
+-m cpu -Et cgroup -o cpu \
+-m cpuacct -Et cgroup -o cpuacct \
+-m cpuset -Et cgroup -o cpuset \
+-m devices -Et cgroup -o devices \
+-m freezer -Et cgroup -o freezer \
+-m memory -Et cgroup -o memory \
+-m net_cls -Et cgroup -o net_cls \
+-m net_prio -Et cgroup -o net_prio \
+-m perf_event -Et cgroup -o perf_event \
+-m pids -Et cgroup -o pids \
+-m rdma -Et cgroup -o rdma \
+-m systemd -Et cgroup -o none,name=systemd,xattr \
+-m unified -Et cgroup2 -o nsdelegate \
+-c / \
+-m /sys/kernel/debug -t debugfs -o mode=0700 -ek \
+-m /sys/kernel/security -t securityfs -ek \
+-m /sys/fs/pstore -t pstore -ek \
+-m /sys/fs/bpf -t bpf -ek \
+-m /proc/sys/fs/binfmt_misc -t binfmt_misc -ek \
+-m /dev/hugepages -Et hugetlbfs -ek \
+-m /sys/fs/fuse/connections -t fusectl -ek
+
+for x in full null random tty urandom zero; do
+	/static/ln /dev/"$x" /dev/__container-devices__/"$x"
+done
+
+/static/ln -s /run/shm /dev/shm
+/static/ln -s /run/shm /tmp
+
+/lib/systemd/systemd-udevd --daemon
+
+udevadm trigger -t subsystems -c add
+udevadm trigger -t devices -c add
+# It's up to the end scripts to run "udevadm settle"
+
+mkdir /lib64-old
+cp /rofs_root/usr/lib64/ld-linux-x86-64.so.2 /lib64-old/
+cp /rofs_root/usr/lib/x86_64-linux-gnu/libc.so.6 /lib64-old/
+cp /rofs_root/usr/lib/x86_64-linux-gnu/libm.so.6 /lib64-old/
+/__autoserver__/ctrtool renameat2 -x /lib64 /lib64-old
+/sbin/ldconfig.real -X
+

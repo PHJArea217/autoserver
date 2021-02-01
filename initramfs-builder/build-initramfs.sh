@@ -6,7 +6,14 @@ mount -t tmpfs -o mode=0755 none /proc/driver
 mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__/kernel_modules
 bsdtar -xC /proc/driver/initramfs/__autoserver__/ --strip-components 1 --no-fflags -f - < ../busybox-builder/busybox.tar.gz
 cp initramfs-init2 /proc/driver/initramfs/init_stage2
+cp init_stage3_example stage3_include /proc/driver/initramfs/__autoserver__/
 cp initramfs-init /proc/driver/initramfs/init
+cp vtrgb.S /proc/driver/vtrgb.S
+( cd /proc/driver
+as --32 -o vtrgb.o vtrgb.S
+ld -m elf_i386 --omagic -o vtrgb vtrgb.o
+strip -o initramfs/__autoserver__/vtrgb vtrgb
+)
 ( cd /proc/driver/initramfs
 mkdir boot_disk dev etc new_root proc rofs_root sys
 ln -s usr/lib lib
