@@ -10,9 +10,9 @@ RUN sed -i "s,http://\(archive\|security\)\.ubuntu\.com/,https://mirrors.edge.ke
 	rm -f /etc/dpkg/dpkg.cfg.d/excludes && apt-get update && apt-get -y --no-install-recommends dist-upgrade
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends acct acl adduser alsa-utils \
 amd64-microcode apache2 apcalc apparmor apport apt-utils avahi-daemon avahi-utils bc bind9 bind9utils binfmt-support \
-bluez bolt bridge-utils bsdmainutils bsdutils btrfs-progs busybox-initramfs ca-certificates cabextract \
+bluez bolt bridge-utils bsdmainutils bsdutils btrfs-progs busybox-initramfs busybox-static ca-certificates cabextract \
 cdw colord console-setup-linux containerd cpufrequtils crda cron cups cups-browsed cups-bsd cups-client \
-cups-core-drivers cups-daemon cups-filters cups-ipp-utils cups-ppdc cups-server-common daemontools dante-server dbus \
+cups-core-drivers cups-daemon cups-filters cups-ipp-utils cups-ppdc cups-server-common curl daemontools dante-server dbus \
 debconf debianutils default-jre-headless dhcping dmidecode dmsetup dns-root-data dnsmasq-base \
 dnsutils docker.io dosfstools dpkg-dev dvd+rw-tools e2fsprogs easy-rsa eatmydata ebtables ethtool extundelete fdisk \
 file fuse gdisk genisoimage geoclue-2.0 geoip-database gettext-base git gitlab-runner gnupg gpg gpgv gpm growisofs hdparm \
@@ -36,6 +36,6 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommend
 gpsd gpsd-clients pps-tools bird quagga-core quagga-bgpd amd64-microcode intel-microcode conntrack unbound wireguard-tools slirp4netns \
 lxc-utils
 
-RUN mv /lib/systemd/system /lib/systemd/system_dist && apt-get -y install --no-install-recommends systemd udev
+RUN mv /lib/systemd/system /lib/systemd/system_dist && mkdir /lib/systemd/system
 EOF
 docker run --rm -v /docker-buildout/autoserver2:/build-output autoserver-rootfs sh -c 'bsdtar -czf - /etc /usr /var > /build-output/rootfs.tar.gz'
