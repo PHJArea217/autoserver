@@ -9,7 +9,7 @@ bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xatt
 (
 set -eu
 cd "$M_TMPDIR"
-for x in etc usr usr/lib usr/lib/modules usr/src usr/share usr/share/man; do
+for x in etc usr usr/lib usr/src usr/share usr/share/man; do
 	[ "directory" = "$(stat -c%F "$x")" ]
 done
 rm -f etc/resolv.conf etc/hosts etc/hostname etc/inittab
