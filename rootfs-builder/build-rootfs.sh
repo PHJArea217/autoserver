@@ -9,7 +9,7 @@ bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xatt
 (
 set -eu
 cd "$M_TMPDIR"
-for x in etc usr usr/lib usr/src usr/share usr/share/man; do
+for x in etc usr usr/lib usr/src usr/share usr/share/man usr/share/doc; do
 	[ "directory" = "$(stat -c%F "$x")" ]
 done
 rm -f etc/resolv.conf etc/hosts etc/hostname etc/inittab
@@ -19,7 +19,7 @@ rm -f etc/resolv.conf etc/hosts etc/hostname etc/inittab
 : > etc/inittab
 rm -rf usr/lib/modules usr/src/linux-headers-*
 ln -s /__autoserver__/kernel_modules/modules usr/lib/modules
-find usr/share/man -type f -name '*.gz' -exec gunzip -- {} +
+find usr/share/doc usr/share/man -type f -name '*.gz' -exec gunzip -- {} +
 )
 # bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xattrs --chroot -f "../linux-builder/build_root/linux-output.tar.gz" lib/modules
 # mv "$M_TMPDIR/lib/modules" "$M_TMPDIR/usr/lib/"
