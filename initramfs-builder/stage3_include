@@ -10,6 +10,7 @@ modprobe fuse
 -D /dev/pts -D /run -D /dev/mqueue -D /dev/__container-devices__ -M 0755 \
 -m /dev/pts -t devpts -o mode=0600 \
 -m /dev/mqueue -t mqueue \
+-m /dev/hugepages -Et hugetlbfs -ek \
 -m /run -t tmpfs -o mode=0755,size=100M \
 -D /run/lock -D /run/shm \
 -D /run/sshd -M 0755 \
@@ -39,7 +40,6 @@ modprobe fuse
 -m /sys/fs/pstore -t pstore -ek \
 -m /sys/fs/bpf -t bpf -ek \
 -m /proc/sys/fs/binfmt_misc -t binfmt_misc -ek \
--m /dev/hugepages -Et hugetlbfs -ek \
 -m /sys/fs/fuse/connections -t fusectl -ek
 
 for x in full null random tty urandom zero; do
