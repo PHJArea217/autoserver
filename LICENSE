@@ -9,3 +9,5 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 The Linux kernel config file (linux-builder/linux_config) originally came from Debian, which is probably GPL-2 licensed.
 
 Container Launcher (busybox-builder/docker/container-launcher.c) is licensed under BSD 2-clause
+
+VTRGB color scheme in initramfs-builder/vtrgb.S is derived from console-setup-linux from Ubuntu, which is GPL-2 licensed. However, the assembly code is my own.
