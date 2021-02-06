@@ -8,10 +8,12 @@ VERBOSE_RESOLUTION_ERRORS FEATURE_PREFER_APPLETS > /build/busybox-d/.config
 printf '# CONFIG_%s is not set\n' FEATURE_PREFER_IPV4_ADDRESS FEATURE_SH_EXTRA_QUIET \
 >> /build/busybox-d/.config
 
+printf 'CONFIG_EXTRA_CFLAGS="-fstack-protector"\n' >> /build/busybox-d/.config
+
 yes "" | make -C /build/busybox-d oldconfig && make -C /build/busybox-d -j 8
 
 cp -ar --reflink=auto /build/busybox-d /build/busybox-s
-sed -i '/^CONFIG_PIE=/d;/^#/d;/^CONFIG_EXTRA_CFLAGS=/cCONFIG_EXTRA_CFLAGS="-static-pie"' /build/busybox-s/.config
+sed -i '/^CONFIG_PIE=/d;/^#/d;/^CONFIG_EXTRA_CFLAGS=/cCONFIG_EXTRA_CFLAGS="-static-pie -fstack-protector"' /build/busybox-s/.config
 yes "" | make -C /build/busybox-s oldconfig && make -C /build/busybox-s -j 8
 
 # cp -a /build/busybox-d/busybox /output/busybox-d
