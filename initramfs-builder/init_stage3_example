@@ -3,9 +3,9 @@
 set -eu
 
 trap 'exec /bin/sh' EXIT
-[ -r /__autoserver__/local/stage3_local_pre ] && . /__autoserver__/local/stage3_local_pre
+[ -r /scripts/stage3_local_pre ] && . /scripts/stage3_local_pre
 /__autoserver__/stage3_include
-[ -r /__autoserver__/local/stage3_local_post ] && . /__autoserver__/local/stage3_local_post
+[ -r /scripts/stage3_local_post ] && . /scripts/stage3_local_post
 exec /__autoserver__/ctrtool init \
 -n /static/sh -C /dev/tty1 -r 1 \
 -n /static/sh -C /dev/tty2 -r 1 \

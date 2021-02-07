@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eu
+set -euC
 mkdir -p /build/busybox-d
 bsdtar -xC /build/busybox-d -f /busybox.tar.bz2 --strip-components 1
 
@@ -16,5 +16,7 @@ cp -ar --reflink=auto /build/busybox-d /build/busybox-s
 sed -i '/^CONFIG_PIE=/d;/^#/d;/^CONFIG_EXTRA_CFLAGS=/cCONFIG_EXTRA_CFLAGS="-static-pie -fstack-protector-strong -D_FORTIFY_SOURCE=2"' /build/busybox-s/.config
 yes "" | make -C /build/busybox-s oldconfig && make -C /build/busybox-s -j 8
 
+/build/busybox-d/busybox --list > /build/busybox-list
+/build/busybox-d/busybox bbconfig > /build/busybox-config
 # cp -a /build/busybox-d/busybox /output/busybox-d
 # cp -a /build/busybox-s/busybox /output/busybox-s
