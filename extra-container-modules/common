@@ -31,7 +31,7 @@ for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	RESULT="${x%%/rootfs.tar}"
 	RESULT="${RESULT##/_ctr-script-build-output*/}"
 	mkdir -p "/proc/driver/$RESULT"
-	bsdtar -x --exclude 'var/cache/*' --exclude 'var/log/*' --exclude 'var/tmp/*' --exclude 'var/backups/*' --exclude 'var/lib/apt/lists/*' --exclude "etc/ssl/private/*" -C "/proc/driver/$RESULT" --no-same-owner --no-same-permissions --no-xattrs --no-acls --chroot -f "$x"
+	bsdtar -x --exclude 'var/cache/*' --exclude 'var/log/*' --exclude 'var/tmp/*' --exclude 'var/backups/*' --exclude 'var/lib/apt/lists/*' --exclude "etc/ssl/private/*" -C "/proc/driver/$RESULT" --no-same-owner --no-same-permissions --no-xattrs --no-acls -f "$x"
 	cd /proc/driver/"$RESULT"
 	if [ "directory" = "`stat -c%F etc`" ]; then
 		for file in resolv.conf hostname hosts inittab; do
