@@ -8,7 +8,7 @@ RUN wget -O /busybox.tar.bz2 https://www.busybox.net/downloads/busybox-"$bb_vers
 ADD busybox-cmd /root/
 
 RUN mkdir /output /build && \
-	adduser --system --group build-user && \
+	adduser --system --group --no-create-home build-user && \
 	chown build-user:build-user /build && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups sh -s < /root/busybox-cmd && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups cat /build/busybox-d/busybox > /output/busybox-d && \
