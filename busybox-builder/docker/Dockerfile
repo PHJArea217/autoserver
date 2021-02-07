@@ -17,12 +17,12 @@ RUN mkdir /output /build && \
 
 RUN mkdir /c-s && cd /c-s && chown build-user:build-user /c-s && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups \
-	sh -c 'set -Ce && git clone https://git.peterjin.org/_/container-scripts && cd /c-s/container-scripts/utils && bsdtar -cJf - > /build/ctrtool-src.tar.xz . && make -j 4 CC="gcc -fstack-protector" && strip ctrtool -o /build/ctrtool' && \
+	sh -c 'set -Ce && git clone https://git.peterjin.org/_/container-scripts && cd /c-s/container-scripts/utils && bsdtar -cJf - > /build/ctrtool-src.tar.xz . && make -j 4 && strip ctrtool -o /build/ctrtool' && \
 	cp /build/ctrtool /build/ctrtool-src.tar.xz /output/
 
 RUN mkdir /socketbox /_socketbox && cd /socketbox && chown build-user:build-user /socketbox && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups \
-	sh -c 'set -Ce && git clone --no-checkout https://git.peterjin.org/_/socketbox && cd socketbox && bsdtar -cJf - > /build/socketbox-src.tar.xz . && git reset --hard && make -j 4 CFLAGS="-Wall -O2 -fvisibility=hidden -fstack-protector" && strip libsocketbox-preload.so send-receive-fd socket-query socketbox socketbox-inetd socketbox-relay' && \
+	sh -c 'set -Ce && git clone --no-checkout https://git.peterjin.org/_/socketbox && cd socketbox && bsdtar -cJf - > /build/socketbox-src.tar.xz . && git reset --hard && make -j 4 && strip libsocketbox-preload.so send-receive-fd socket-query socketbox socketbox-inetd socketbox-relay' && \
 	cd socketbox && cp libsocketbox-preload.so send-receive-fd socket-query socketbox socketbox-inetd socketbox-relay /build/socketbox-src.tar.xz /_socketbox/
 
 # RUN for x in container-launcher reset_cgroup mini-init container-rootfs-mount; do gcc -o /output/"$x" /output/"$x".c && strip /output/"$x" && gzip -9 /output/"$x.c"; done
