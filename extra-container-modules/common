@@ -1,0 +1,46 @@
+#!/bin/sh
+write_system() {
+	mkdir -p /_ctr-script-build-output_"$1"/_system
+	chown "$2:$2" /_ctr-script-build-output_"$1"/_system
+	setpriv --reuid="$2" --regid="$2" --clear-groups --no-new-privs unshare -r -m --propagation=slave sh -s "$1" <<\EOF
+set -eux
+mount -t tmpfs -o mode=0755 none /proc/driver
+exec 3<../busybox-builder
+cd /proc/driver
+mkdir -p bin sbin lib socketbox src
+ln -s lib lib64
+bsdtar -xC bin --strip-components 1 --no-fflags -f - < /proc/self/fd/3/busybox.tar.gz output_b
+bsdtar -xC src --strip-components 1 --no-fflags -f - < /proc/self/fd/3/busybox.tar.gz output_s
+bsdtar -xC sbin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/b
+bsdtar -xC lib --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/i
+bsdtar -xC socketbox --strip-components 1 --no-fflags -f /proc/self/fd/3/busybox.tar.gz _socketbox
+bsdtar -cf /_ctr-script-build-output_"$1"/_system/rootfs.tar .
+EOF
+}
+do_build_output() {
+	set -eux
+	mkdir -p /_ctr-script-build-output_"$1"/_output
+	chown "$2:$2" /_ctr-script-build-output_"$1"/_output
+	setpriv --reuid="$2" --regid="$2" --clear-groups --no-new-privs unshare -r -m --propagation=slave sh -s "$1" <<\EOF
+set -eux
+rm -rf /_ctr-script-build-output_"$1"/_output/tmp
+mkdir /_ctr-script-build-output_"$1"/_output/tmp
+mount --bind /_ctr-script-build-output_"$1"/_output/tmp /proc/driver
+# mount -t tmpfs -o mode=0755,size=4g none /proc/driver
+for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
+	RESULT="${x%%/rootfs.tar}"
+	RESULT="${RESULT##/_ctr-script-build-output*/}"
+	mkdir -p "/proc/driver/$RESULT"
+	bsdtar -x --exclude 'var/cache/*' --exclude 'var/log/*' --exclude 'var/tmp/*' --exclude 'var/backups/*' --exclude 'var/lib/apt/lists/*' --exclude "etc/ssl/private/*" -C "/proc/driver/$RESULT" --no-same-owner --no-same-permissions --no-xattrs --no-acls -f "$x"
+	cd /proc/driver/"$RESULT"
+	if [ "directory" = "`stat -c%F etc`" ]; then
+		for file in resolv.conf hostname hosts inittab; do
+			rm -f etc/"$file"
+			:> etc/"$file"
+		done
+	fi
+done
+cd /
+mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend -Xbcj x86
+EOF
+}

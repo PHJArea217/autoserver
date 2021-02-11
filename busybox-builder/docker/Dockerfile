@@ -7,18 +7,21 @@ RUN wget -O /busybox.tar.bz2 https://www.busybox.net/downloads/busybox-"$bb_vers
 
 ADD busybox-cmd /root/
 
-RUN mkdir /output /build && \
+RUN mkdir /output_b /output_s /build && \
 	adduser --system --group --no-create-home build-user && \
 	chown build-user:build-user /build && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups sh -s < /root/busybox-cmd && \
-	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups cat /build/busybox-d/busybox > /output/busybox-d && \
-	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups cat /build/busybox-s/busybox > /output/busybox-s && \
-	chmod +x /output/busybox-d /output/busybox-s
+	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups cat /build/busybox-d/busybox > /output_b/busybox-d && \
+	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups cat /build/busybox-s/busybox > /output_b/busybox-s && \
+	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups xz -3ec /build/busybox-list > /output_s/busybox-list.xz && \
+	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups xz -3ec /build/busybox-config > /output_s/busybox-config.xz && \
+	chmod +x /output_b/busybox-d /output_b/busybox-s
 
 RUN mkdir /c-s && cd /c-s && chown build-user:build-user /c-s && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups \
 	sh -c 'set -Ce && git clone https://git.peterjin.org/_/container-scripts && cd /c-s/container-scripts/utils && bsdtar -cJf - > /build/ctrtool-src.tar.xz . && make -j 4 && strip ctrtool -o /build/ctrtool' && \
-	cp /build/ctrtool /build/ctrtool-src.tar.xz /output/
+	cp /build/ctrtool /output_b/ && \
+	cp /build/ctrtool-src.tar.xz /output_s/
 
 RUN mkdir /socketbox /_socketbox && cd /socketbox && chown build-user:build-user /socketbox && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups \
