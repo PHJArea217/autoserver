@@ -4,12 +4,42 @@ set -eu
 [ ! -f /proc/version ]
 [ 1 = "$$" ]
 trap 'exec /bin/sh' EXIT
-for x in $(/bin/busybox --list); do
-	/bin/busybox ln -s busybox "bin/$x" || :
+
+cd /
+export PATH=/bin
+/bin/mount -t proc -o nosuid,nodev,noexec none /proc
+/bin/mount -t sysfs -o nosuid,nodev,noexec none /sys
+/bin/mount -t devtmpfs -o nosuid,noexec none /dev
+/bin/mount -t tmpfs -o mode=0755 none /new_root
+
+[ -r /scripts/premount-script ] && . /scripts/premount-script
+
+SEQ=0
+while [ ! -e "$autoserver_boot_dev" ]; do
+	sleep 2
+	SEQ="$((SEQ+1))"
+	if [ "$SEQ" -gt 10 ]; then
+		break
+	fi
+	printf 'Waiting for %s... (attempt %d)\n' "$autoserver_boot_dev" "$SEQ"
 done
 
-mount --rbind / /new_root
-cd /new_root
-mount --move . /
-exec chroot . /init_stage2 "$@"
-false
+/bin/mount -t "${autoserver_boot_fstype:-vfat}" -o "${autoserver_boot_opts:-ro}" "$autoserver_boot_dev" "/boot_disk"
+/bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/autosvr/system.img /rofs_root
+
+for x in /boot_disk/autosvr/*.txz; do
+	/usr/bin/bsdtar -xC /new_root --chroot -f "$x"
+done
+mkdir -p /new_root/proc /new_root/sys /new_root/dev /new_root/rofs_root /new_root/boot_disk /new_root/kernel_modules
+
+cd /
+
+/bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/autosvr/k_mod.img /new_root/kernel_modules
+/bin/mount --move /sys /new_root/sys
+/bin/mount --move /rofs_root /new_root/rofs_root
+/bin/mount --move /boot_disk /new_root/boot_disk
+/bin/mount --move /dev /new_root/dev
+/bin/mount --move /proc /new_root/proc
+export PATH="${autoserver_PATH:-/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games}"
+[ -e /new_root/etc/alternatives ] || ln -s /rofs_root/etc/alternatives /new_root/etc/alternatives
+exec /bin/busybox switch_root -c /dev/console /new_root "${autoserver_init:-/init_stage3}"

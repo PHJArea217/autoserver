@@ -1,12 +1,12 @@
 #!/bin/sh
 set -eu
+
+# Initramfs
 unshare -r -m --propagation=slave <<\EOF
 set -eu
 mount -t tmpfs -o mode=0755 none /proc/driver
-mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__/kernel_modules
-bsdtar -xC /proc/driver/initramfs/__autoserver__/ --strip-components 1 --no-fflags -f - output < ../busybox-builder/busybox.tar.gz
-cp initramfs-init2 /proc/driver/initramfs/init_stage2
-cp start-systemd.sh init_stage3_example stage3_include /proc/driver/initramfs/__autoserver__/
+mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__/
+bsdtar -xC /proc/driver/initramfs/bin --strip-components 1 --no-fflags -f - output_b/busybox-s < ../busybox-builder/busybox.tar.gz
 cp initramfs-init /proc/driver/initramfs/init
 cp vtrgb.S /proc/driver/vtrgb.S
 ( cd /proc/driver
@@ -21,17 +21,53 @@ ln -s usr/lib64 lib64
 ln -s usr/lib32 lib32
 ln -s usr/libx32 libx32
 ln -s rofs_root/usr usr
-mv __autoserver__/busybox-s bin/busybox
-ln -s busybox bin/sh
-for x in container-launcher container-rootfs-mount mini-init mount_seq reset_cgroup simple-renameat2; do
-	ln -s ctrtool "__autoserver__/$x"
+mv bin/busybox-s bin/busybox
+for x in insmod mkdir mount printf sh sleep umount; do
+	ln -s busybox bin/"$x"
 done
-# ln -s /rofs_root/etc/alternatives etc/alternatives
-mkdir etc/ld.so.conf.d
-printf '%s\n' 'include /etc/ld.so.conf.d/*.conf' /lib64 /usr/lib/x86_64-linux-gnu /usr/local/lib/x86_64-linux-gnu > etc/ld.so.conf
+ln -s /rofs_root/etc/alternatives etc/alternatives
 find -print0 > ../initramfs_filelist.txt
 )
 (cd /proc/driver/initramfs && cpio -0o -H newc < ../initramfs_filelist.txt) > initrd
 EOF
 
-gzip -9 initrd
+xz -2ec --check=crc32 initrd > initrd.xz
+rm -f initrd
+
+
+# Base rootfs
+mkdir -p rootfs
+unshare -r -m --propagation=slave <<\EOF
+set -eu
+mount -t tmpfs -o mode=0755 none /proc/driver
+exec 3<.
+cd /proc/driver
+mkdir rootfs
+cd rootfs
+mkdir -p __autoserver__ __autoserver_files__/bin __autoserver_files__/src
+cp -r /proc/self/fd/3/include __autoserver_files__
+bsdtar -xC __autoserver_files__/bin --strip-components 1 --no-fflags -f - output_b
+bsdtar -xC __autoserver_files__/src --strip-components 1 --no-fflags -f - output_s
+mkdir -p static etc/ld.so.conf.d
+ln -s usr/bin bin
+ln -s usr/lib lib
+ln -s usr/lib64 lib64
+ln -s usr/lib32 lib32
+ln -s usr/libx32 libx32
+ln -s usr/sbin sbin
+ln -s rofs_root/usr usr
+ln -s ../__autoserver-files__/include/ld.so.conf etc/ld.so.conf
+ln -s ../__autoserver-files__/include/init_stage3_example __autoserver__/init_stage3_example
+ln -s ../__autoserver-files__/include/start-systemd.sh __autoserver__/start-systemd.sh
+ln -s ../__autoserver-files__/include/stage3_include __autoserver__/stage3_include
+ln -s ../__autoserver_files__/bin/busybox-d __autoserver__/busybox-d
+ln -s ../__autoserver_files__/bin/busybox-s static/busybox
+ln -s busybox static/sh
+ln -s ../__autoserver_files__/bin/ctrtool __autoserver__/ctrtool
+ln -s ../kernel_modules __autoserver__/kernel_modules
+for x in container-launcher container-rootfs-mount mini-init mount_seq reset_cgroup simple-renameat2; do
+	ln -s ctrtool __autoserver__/"$x"
+	ln -s ctrtool __autoserver-files__/bin/"$x"
+done
+bsdtar -cJf - . > /proc/self/fd/3/rootfs/0_base.txz
+EOF
