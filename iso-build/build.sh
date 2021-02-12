@@ -3,7 +3,8 @@ set -eu
 mkdir -p output/autosvr
 cp ../linux-builder/build_root/arch/x86/boot/bzImage output/vmlinuz
 xz -ce ../linux-builder/build_root/System.map > output/sysmap.xz
-cp ../initramfs-builder/initrd.gz output/
+cp ../initramfs-builder/initrd.xz output/
+cp -l --reflink=auto ../initramfs-builder/rootfs/*.txz output/autosvr/
 cp /usr/lib/ISOLINUX/isolinux.bin output/
 cp /usr/lib/syslinux/modules/bios/ldlinux.c32 output/
 cp syslinux.cfg output/

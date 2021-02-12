@@ -44,10 +44,10 @@ exec 3<.
 cd /proc/driver
 mkdir rootfs
 cd rootfs
-mkdir -p __autoserver__ __autoserver_files__/bin __autoserver_files__/src
-cp -r /proc/self/fd/3/include __autoserver_files__
-bsdtar -xC __autoserver_files__/bin --strip-components 1 --no-fflags -f - output_b
-bsdtar -xC __autoserver_files__/src --strip-components 1 --no-fflags -f - output_s
+mkdir -p __autoserver__ __autoserver-files__/bin __autoserver-files__/src
+cp -r /proc/self/fd/3/include __autoserver-files__
+bsdtar -xC __autoserver-files__/bin --strip-components 1 --no-fflags -f - output_b < /proc/self/fd/3/../busybox-builder/busybox.tar.gz
+bsdtar -xC __autoserver-files__/src --strip-components 1 --no-fflags -f - output_s < /proc/self/fd/3/../busybox-builder/busybox.tar.gz
 mkdir -p static etc/ld.so.conf.d
 ln -s usr/bin bin
 ln -s usr/lib lib
@@ -60,10 +60,10 @@ ln -s ../__autoserver-files__/include/ld.so.conf etc/ld.so.conf
 ln -s ../__autoserver-files__/include/init_stage3_example __autoserver__/init_stage3_example
 ln -s ../__autoserver-files__/include/start-systemd.sh __autoserver__/start-systemd.sh
 ln -s ../__autoserver-files__/include/stage3_include __autoserver__/stage3_include
-ln -s ../__autoserver_files__/bin/busybox-d __autoserver__/busybox-d
-ln -s ../__autoserver_files__/bin/busybox-s static/busybox
+ln -s ../__autoserver-files__/bin/busybox-d __autoserver__/busybox-d
+ln -s ../__autoserver-files__/bin/busybox-s static/busybox
 ln -s busybox static/sh
-ln -s ../__autoserver_files__/bin/ctrtool __autoserver__/ctrtool
+ln -s ../__autoserver-files__/bin/ctrtool __autoserver__/ctrtool
 ln -s ../kernel_modules __autoserver__/kernel_modules
 for x in container-launcher container-rootfs-mount mini-init mount_seq reset_cgroup simple-renameat2; do
 	ln -s ctrtool __autoserver__/"$x"
