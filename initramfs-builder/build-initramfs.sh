@@ -22,7 +22,7 @@ ln -s usr/lib32 lib32
 ln -s usr/libx32 libx32
 ln -s rofs_root/usr usr
 mv bin/busybox-s bin/busybox
-for x in insmod mkdir mount printf sh sleep umount; do
+for x in insmod ln mkdir mount printf sh sleep umount; do
 	ln -s busybox bin/"$x"
 done
 ln -s /rofs_root/etc/alternatives etc/alternatives
