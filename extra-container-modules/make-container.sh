@@ -29,7 +29,7 @@ php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openssh-server openssh-client \
 openssh-sftp-server git bind9 bind9utils dnsutils libarchive-tools xz-utils && rm -rf /etc/ssh/ssh_host_* /etc/bind/rndc.key
 
-RUN wget -O /gitea.xz https://dl.gitea.io/gitea/1.13.2/gitea-1.13.2-linux-amd64.xz && \
+RUN wget -O /gitea.xz https://dl.gitea.io/gitea/1.13.3/gitea-1.13.3-linux-amd64.xz && \
 	mkdir /extras && \
 	xzcat /gitea.xz > /extras/gitea.bin && \
 	chmod +x /extras/gitea.bin && \
