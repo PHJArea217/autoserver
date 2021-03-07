@@ -4,8 +4,8 @@ mkdir -p /build/busybox-d
 bsdtar -xC /build/busybox-d -f /busybox.tar.bz2 --strip-components 1
 
 printf 'CONFIG_%s=y\n' BASH_IS_ASH BBCONFIG FEATURE_UNIX_LOCAL PIE RFKILL \
-VERBOSE_RESOLUTION_ERRORS FEATURE_PREFER_APPLETS > /build/busybox-d/.config
-printf '# CONFIG_%s is not set\n' FEATURE_PREFER_IPV4_ADDRESS FEATURE_SH_EXTRA_QUIET \
+VERBOSE_RESOLUTION_ERRORS FEATURE_PREFER_APPLETS FEATURE_SH_STANDALONE > /build/busybox-d/.config
+printf 'CONFIG_%s=n\n' FEATURE_PREFER_IPV4_ADDRESS FEATURE_SH_EXTRA_QUIET \
 >> /build/busybox-d/.config
 
 printf 'CONFIG_EXTRA_CFLAGS="-fstack-protector-strong -D_FORTIFY_SOURCE=2"\nCONFIG_EXTRA_LDFLAGS="-z relro -z now"\n' >> /build/busybox-d/.config
