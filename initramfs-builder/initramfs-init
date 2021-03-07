@@ -41,5 +41,5 @@ cd /
 /bin/mount --move /dev /new_root/dev
 /bin/mount --move /proc /new_root/proc
 export PATH="${autoserver_PATH:-/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/games:/usr/games}"
-[ -e /new_root/etc/alternatives ] || ln -s /rofs_root/etc/alternatives /new_root/etc/alternatives
+[ -e /new_root/etc/alternatives ] || /bin/ln -s /rofs_root/etc/alternatives /new_root/etc/alternatives
 exec /bin/busybox switch_root -c /dev/console /new_root "${autoserver_init:-/init_stage3}"

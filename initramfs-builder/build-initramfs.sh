@@ -22,7 +22,7 @@ ln -s usr/lib32 lib32
 ln -s usr/libx32 libx32
 ln -s rofs_root/usr usr
 mv bin/busybox-s bin/busybox
-for x in insmod mkdir mount printf sh sleep umount; do
+for x in insmod ln mkdir mount printf sh sleep umount; do
 	ln -s busybox bin/"$x"
 done
 ln -s /rofs_root/etc/alternatives etc/alternatives
@@ -63,6 +63,7 @@ ln -s ../__autoserver-files__/include/stage3_include __autoserver__/stage3_inclu
 ln -s ../__autoserver-files__/bin/busybox-d __autoserver__/busybox-d
 ln -s ../__autoserver-files__/bin/busybox-s static/busybox
 ln -s busybox static/sh
+ln -s busybox static/ln
 ln -s ../__autoserver-files__/bin/ctrtool __autoserver__/ctrtool
 ln -s ../kernel_modules __autoserver__/kernel_modules
 for x in container-launcher container-rootfs-mount mini-init mount_seq reset_cgroup simple-renameat2; do
