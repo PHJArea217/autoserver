@@ -1,7 +1,7 @@
 FROM ubuntu:20.04
 ARG bb_version=1.33.0
 ARG bb_sha512=20f8f5197c5cbc8b244f69d82d6628066296c7306a9736ee1344cb555882854412cf7f264490f9a735251c139b9621004f48e972d06ef2623a3c99278f8e765a
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive sh -c 'apt-get -y dist-upgrade && apt-get install -y ca-certificates libarchive-tools build-essential gcc git make wget'
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive sh -c 'apt-get -y dist-upgrade && apt-get install -y ca-certificates libarchive-tools build-essential gcc git make wget iproute2'
 RUN wget -O /busybox.tar.bz2 https://www.busybox.net/downloads/busybox-"$bb_version".tar.bz2 && sha512sum /busybox.tar.bz2 | grep -q "^$bb_sha512"
 # ADD *.c /output/
 
