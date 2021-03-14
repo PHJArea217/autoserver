@@ -8,9 +8,11 @@ trap 'exec /bin/sh' EXIT
 cd /
 export PATH=/bin
 /bin/mount -t proc -o nosuid,nodev,noexec none /proc
+/bin/mount -t tmpfs -o mode=0755 none /new_root
 /bin/mount -t sysfs -o nosuid,nodev,noexec none /sys
 /bin/mount -t devtmpfs -o nosuid,noexec none /dev
-/bin/mount -t tmpfs -o mode=0755 none /new_root
+
+[ -d /linux_modules ] && insmod /linux_modules/*.ko
 
 [ -r /scripts/premount-script ] && . /scripts/premount-script
 

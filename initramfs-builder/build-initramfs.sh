@@ -66,7 +66,7 @@ ln -s busybox static/sh
 ln -s busybox static/ln
 ln -s ../__autoserver-files__/bin/ctrtool __autoserver__/ctrtool
 ln -s ../kernel_modules __autoserver__/kernel_modules
-for x in container-launcher container-rootfs-mount mini-init mount_seq reset_cgroup simple-renameat2; do
+for x in container-launcher container-rootfs-mount debug_shell mini-init mount_seq reset_cgroup simple-renameat2 set_fds; do
 	ln -s ctrtool __autoserver__/"$x"
 	ln -s ctrtool __autoserver-files__/bin/"$x"
 done
