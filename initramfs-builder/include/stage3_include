@@ -55,6 +55,10 @@ udevadm trigger -t subsystems -c add
 udevadm trigger -t devices -c add
 # It's up to the end scripts to run "udevadm settle"
 
+if [ "1" = "${autoserver_wait_udev:-0}" ]; then
+	udevadm settle || :
+fi
+
 mkdir /lib64-old
 cp /rofs_root/usr/lib64/ld-linux-x86-64.so.2 \
 /rofs_root/usr/lib/x86_64-linux-gnu/libc.so.6 \
