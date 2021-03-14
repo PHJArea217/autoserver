@@ -22,7 +22,7 @@ RUN set -eu; export DEBIAN_FRONTEND=noninteractive; \
 	openvpn p7zip-full pavucontrol postfix pulseaudio pv qemu qrencode rsync safe-rm scanmem screen \
 	sndfile-programs sndfile-tools socat sox squashfs-tools strace syslinux tcpd tigervnc-standalone-server \
 	timidity tmux traceroute translate units valgrind vim-nox vlc vorbis-tools vsftpd wavpack x11vnc \
-	xserver-xephyr zile wireshark wine mono; \
+	xserver-xephyr zile wireshark wine mono-complete; \
 	rm -rf /etc/ssh /etc/bind/rndc.key /etc/ssl/private /etc/ssl/certs/ssl-cert-snakeoil.pem /var/lib/polkit-1/localauthority && ln -s /run/tb-config/ssh /etc/ssh; \
 	mv /usr/local /usr/_local && mkdir /usr/local && rm /etc/ssl/certs/ca-certificates.crt && dpkg-reconfigure ca-certificates
 EOF

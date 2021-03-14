@@ -31,7 +31,7 @@ wireless-regdb wireless-tools wodim wpasupplicant xserver-xorg-core xserver-xorg
 rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc/ssl/private/ssl-cert-snakeoil.key \
 	/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem /usr/bin/man /sbin/switch_root && \
 	sh -c 'set -Ce; printf %s\\n "#!/bin/sh" :\ \$\{LESS=r\} "export LESS" "exec /static/busybox man "\"\$\@\" \
-	> /usr/bin/man' && chmod +x /usr/bin/man && dpkg-reconfigure ca-certificates
+	> /usr/bin/man' && chmod +x /usr/bin/man && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends linux-firmware build-essential make
 
