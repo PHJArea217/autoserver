@@ -20,8 +20,9 @@ RUN mkdir /output_b /output_s /build && \
 RUN mkdir /c-s && cd /c-s && chown build-user:build-user /c-s && \
 	setpriv --no-new-privs --reuid=build-user --regid=build-user --clear-groups \
 	sh -c 'set -Ce && git clone --no-checkout https://git.peterjin.org/_/container-scripts && cd /c-s/container-scripts && bsdtar -cJf - > /build/ctrtool-src.tar.xz . && \
-	git reset --hard && make -C ctrtool -j 4 && make -C bind-anywhere -j 4 && strip ctrtool/ctrtool -o /build/ctrtool && strip bind-anywhere/bind-anywhere.so -o /build/bind-anywhere.so' && \
-	cp /build/ctrtool /build/bind-anywhere.so /output_b/ && \
+	git reset --hard && make CFLAGS_EXTRA=-DCTRTOOL_CLONE3_HACK -C ctrtool -j 4 && make -C bind-anywhere -j 4 && strip ctrtool/ctrtool -o /build/ctrtool && \
+	strip ctrtool/ctrtool-static -o /build/ctrtool-static && strip bind-anywhere/bind-anywhere.so -o /build/bind-anywhere.so' && \
+	cp /build/ctrtool /build/ctrtool-static /build/bind-anywhere.so /output_b/ && \
 	cp /build/ctrtool-src.tar.xz /output_s/
 
 RUN mkdir /socketbox /_socketbox && cd /socketbox && chown build-user:build-user /socketbox && \
