@@ -2,17 +2,34 @@
 set -eu
 
 # Initramfs
+T_ARCH_S=""
+
+case "${T_ARCH:=amd64}" in
+	amd64|aarch64)
+		T_ARCH_S="$T_ARCH"
+		;;
+esac
+
+export T_ARCH_S
+
 unshare -r -m --propagation=slave <<\EOF
 set -eu
 mount -t tmpfs -o mode=0755 none /proc/driver
 mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__/
-bsdtar -xC /proc/driver/initramfs/bin --strip-components 1 --no-fflags -f - output_b/busybox-s < ../busybox-builder/busybox.tar.gz
+bsdtar -x -f - -O "$T_ARCH_S/busybox-s" < ../busybox-builder/__busybox_n.tar.gz > /proc/driver/initramfs/bin/busybox-s
+chmod +x /proc/driver/initramfs/bin/busybox-s
 cp initramfs-init /proc/driver/initramfs/init
 cp vtrgb.S /proc/driver/vtrgb.S
+cp vtrgb_arm.S /proc/driver/vtrgb_arm.S
 ( cd /proc/driver
-as --32 -o vtrgb.o vtrgb.S
-ld -m elf_i386 --omagic -o vtrgb vtrgb.o
-strip -o initramfs/__autoserver__/vtrgb vtrgb
+
+x86_64-linux-gnu-as --32 -o vtrgb.o vtrgb.S
+x86_64-linux-gnu-ld -m elf_i386 --omagic -o vtrgb vtrgb.o
+x86_64-linux-gnu-strip -o initramfs/__autoserver__/vtrgb vtrgb
+
+arm-linux-gnueabihf-as -o vtrgb_arm.o vtrgb_arm.S
+arm-linux-gnueabihf-ld --omagic -o vtrgb_arm vtrgb_arm.o
+arm-linux-gnueabihf-strip -o initramfs/__autoserver__/vtrgb_arm vtrgb_arm
 )
 ( cd /proc/driver/initramfs
 mkdir boot_disk dev etc new_root proc rofs_root sys
@@ -44,10 +61,11 @@ exec 3<.
 cd /proc/driver
 mkdir rootfs
 cd rootfs
-mkdir -p __autoserver__ __autoserver-files__/bin __autoserver-files__/src
+mkdir -p __autoserver__ __autoserver-files__/bin __autoserver-files__
 cp -r /proc/self/fd/3/include __autoserver-files__
-bsdtar -xC __autoserver-files__/bin --strip-components 1 --no-fflags -f - output_b < /proc/self/fd/3/../busybox-builder/busybox.tar.gz
-bsdtar -xC __autoserver-files__/src --strip-components 1 --no-fflags -f - output_s < /proc/self/fd/3/../busybox-builder/busybox.tar.gz
+bsdtar -xC __autoserver-files__/bin --strip-components 2 --no-fflags -f - "$T_ARCH_S/ctrtool*" < /proc/self/fd/3/../busybox-builder/__ctr-scripts.tar.gz
+bsdtar -xC __autoserver-files__/bin --strip-components 2 --no-fflags -f - "$T_ARCH_S" < /proc/self/fd/3/../busybox-builder/__busybox_n.tar.gz
+cp /proc/self/fd/3/../busybox-builder/__c_sources.tar.gz __autoserver-files__/sources.tar.gz
 mkdir -p static etc/ld.so.conf.d
 ln -s usr/bin bin
 ln -s usr/lib lib

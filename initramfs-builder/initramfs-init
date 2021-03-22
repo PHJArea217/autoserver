@@ -1,5 +1,6 @@
 #!/bin/sh
 /__autoserver__/vtrgb
+/__autoserver__/vtrgb_arm
 set -eu
 [ ! -f /proc/version ]
 [ 1 = "$$" ]
