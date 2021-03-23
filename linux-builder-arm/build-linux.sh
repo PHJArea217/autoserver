@@ -47,6 +47,8 @@ if [ "1" = "${DO_SHELL:-0}" ]; then
 	exec sh -c 'exec /bin/bash </dev/tty'
 	exit 1
 fi
-exec sh -c 'cd /build_root && make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- olddefconfig && make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j 5 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_root/kernel-output ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- modules_install && make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_HDR_PATH=/build_root/kernel-output/usr headers_install && rm -f kernel-output/lib/modules/*/source kernel-output/lib/modules/*/build'
+exec sh -c 'cd /build_root && make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- olddefconfig && \
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j 5 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_root/kernel-output ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- modules_install && \
+make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- INSTALL_HDR_PATH=/build_root/kernel-output/usr headers_install && rm -f kernel-output/lib/modules/*/source kernel-output/lib/modules/*/build && \
+mksquashfs /build_root/kernel-output/usr /build_root/kernel-output/lib/modules /build_root/kernel-output/k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend -all-root'
 EOF
-mksquashfs build_root/kernel-output/usr build_root/kernel-output/lib/modules k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend -all-root
