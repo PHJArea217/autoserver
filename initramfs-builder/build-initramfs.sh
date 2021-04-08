@@ -45,7 +45,7 @@ done
 ln -s /rofs_root/etc/alternatives etc/alternatives
 find -print0 > ../initramfs_filelist.txt
 )
-(cd /proc/driver/initramfs && cpio -0o -H newc -R 0:0 < ../initramfs_filelist.txt) > initrd
+(cd /proc/driver/initramfs && cpio -0o -H newc -R +0:+0 < ../initramfs_filelist.txt) > initrd
 EOF
 
 xz -2ec --check=crc32 initrd > initrd.xz
