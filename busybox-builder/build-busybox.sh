@@ -19,7 +19,7 @@ touch __build_root_r/_busybox_done
 
 sh -c 'set -eu; cd __build_root_r; [ ! -d container-scripts/.git ] && git clone --no-checkout https://git-ipv6.srv.peterjin.org/_/container-scripts; [ ! -d socketbox/.git ] && git clone --no-checkout https://git-ipv6.srv.peterjin.org/_/socketbox; exit 0'
 
-bsdtar -czf __c_sources.tar.gz __build_root_r/container-scripts __build_root_r/socketbox
+bsdtar -czf __c_sources.tar.gz --uid 0 --gid 0 __build_root_r/container-scripts __build_root_r/socketbox
 
 script -c 'exec unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave setsid sh' __build.log <<\EOF
 set -eux
