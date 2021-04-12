@@ -45,7 +45,7 @@ done
 ln -s /rofs_root/etc/alternatives etc/alternatives
 find -print0 > ../initramfs_filelist.txt
 )
-(cd /proc/driver/initramfs && cpio -0o -H newc < ../initramfs_filelist.txt) > initrd
+(cd /proc/driver/initramfs && cpio -0o -H newc -R +0:+0 < ../initramfs_filelist.txt) > initrd
 EOF
 
 xz -2ec --check=crc32 initrd > initrd.xz
@@ -88,5 +88,5 @@ for x in container-launcher container-rootfs-mount debug_shell mini-init mount_s
 	ln -s ctrtool __autoserver__/"$x"
 	ln -s ctrtool __autoserver-files__/bin/"$x"
 done
-bsdtar -cJf - . > /proc/self/fd/3/rootfs/0_base.txz
+bsdtar -cJf - --uid 0 --gid 0 . > /proc/self/fd/3/rootfs/0_base.txz
 EOF

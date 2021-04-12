@@ -58,7 +58,7 @@ done
 
 chmod -x /bin_out_a/amd64/*.so /bin_out_a/aarch64/*.so /bin_out_a/arm32/*.so
 
-bsdtar -cz -C /bin_out_a -f - . > /dev/fd/4
+bsdtar -cz -C /bin_out_a -f - --uid 0 --gid 0 . > /dev/fd/4
 
 exec 4>&-
 
@@ -134,4 +134,4 @@ cp busybox-s-aarch64/busybox /bin_out_b/aarch64/busybox-s
 cp busybox-d-arm32/busybox /bin_out_b/arm32/busybox-d
 cp busybox-s-arm32/busybox /bin_out_b/arm32/busybox-s
 
-bsdtar -cz -C /bin_out_b -f - . > /dev/fd/3
+bsdtar -cz -C /bin_out_b -f - --uid 0 --gid 0 . > /dev/fd/3
