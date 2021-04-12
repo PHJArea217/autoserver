@@ -17,7 +17,7 @@ docker build -t ctr-script-generic - <<\EOF
 FROM ubuntu:20.04
 RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends nginx-extras fcgiwrap apache2 python3 \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends htop less strace nginx-extras fcgiwrap apache2 python3 \
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm \
 php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \
 qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf \
