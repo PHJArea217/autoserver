@@ -9,7 +9,7 @@ cp /usr/lib/ISOLINUX/isolinux.bin output/
 cp /usr/lib/syslinux/modules/bios/ldlinux.c32 output/
 cp syslinux.cfg output/
 cp -l --reflink=auto ../rootfs-builder/system.img output/autosvr/
-cp -l --reflink=auto ../linux-builder/k_mod.img output/autosvr/
+cp -l --reflink=auto ../linux-builder/build_root/kernel-output/k_mod.img output/autosvr/
 
 cat version.txt > output/version.txt
 date >> output/version.txt
