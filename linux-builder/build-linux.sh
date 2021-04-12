@@ -7,7 +7,7 @@ mkdir -p build_root/kernel-output
 [ ! -f build_root/.config ] && bsdtar -xf linux.tar.xz -C build_root --strip-components 1
 cp linux_config build_root/.config
 
-unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave sh <<\EOF
+script -qc 'unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave sh -c "exec /bin/sh <&3 3<&-"' /dev/null 3<<\EOF
 set -eux
 
 hostname autoserver

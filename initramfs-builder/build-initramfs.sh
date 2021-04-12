@@ -5,7 +5,7 @@ set -eu
 T_ARCH_S=""
 
 case "${T_ARCH:=amd64}" in
-	amd64|aarch64)
+	amd64|aarch64|arm32)
 		T_ARCH_S="$T_ARCH"
 		;;
 esac

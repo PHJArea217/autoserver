@@ -5,9 +5,9 @@ set -eu
 mkdir -p build_root/kernel-output
 [ ! -f linux.tar.xz ] && wget -O linux.tar.xz https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.11.8.tar.xz
 [ ! -f build_root/.config ] && bsdtar -xf linux.tar.xz -C build_root --strip-components 1
-cp linux_config build_root/.config
+cp -u linux_config build_root/.config
 
-unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave sh <<\EOF
+script -qc 'unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave sh -c "exec /bin/sh <&3 3<&-"' /dev/null 3<<\EOF
 set -eux
 
 hostname autoserver
@@ -44,6 +44,7 @@ export HOME=/root
 pivot_root . .
 umount -l .
 if [ "1" = "${DO_SHELL:-0}" ]; then
+	export ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu-
 	exec sh -c 'exec /bin/bash </dev/tty'
 	exit 1
 fi
