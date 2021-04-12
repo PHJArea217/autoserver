@@ -11,7 +11,7 @@ export PATH=/bin
 /bin/mount -t sysfs -o nosuid,nodev,noexec none /sys
 /bin/mount -t devtmpfs -o nosuid,noexec none /dev
 
-sysctl -w kernel.pid_max=4194304
+# sysctl -w kernel.pid_max=4194304
 sh -c '/__autoserver__/vtrgb; /__autoserver__/vtrgb_arm' >/dev/null 2>&1 || :
 
 [ -d /linux_modules ] && insmod /linux_modules/*.ko
