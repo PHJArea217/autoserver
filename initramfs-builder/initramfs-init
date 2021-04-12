@@ -4,6 +4,8 @@ set -eu
 [ 1 = "$$" ]
 trap 'exec /bin/sh' EXIT
 
+: "${autoserver_dir:=autosvr}"
+
 cd /
 export PATH=/bin
 /bin/mount -t proc -o nosuid,nodev,noexec none /proc
@@ -29,16 +31,16 @@ while [ ! -e "$autoserver_boot_dev" ]; do
 done
 
 /bin/mount -t "${autoserver_boot_fstype:-vfat}" -o "${autoserver_boot_opts:-ro}" "$autoserver_boot_dev" "/boot_disk"
-/bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/autosvr/system.img /rofs_root
+/bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/"$autoserver_dir"/system.img /rofs_root
 
-for x in /boot_disk/autosvr/*.txz; do
+for x in /boot_disk/"$autoserver_dir"/*.txz; do
 	/usr/bin/bsdtar -xC /new_root --chroot -f "$x"
 done
 mkdir -p /new_root/proc /new_root/sys /new_root/dev /new_root/rofs_root /new_root/boot_disk /new_root/kernel_modules
 
 cd /
 
-/bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/autosvr/k_mod.img /new_root/kernel_modules
+/bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/"$autoserver_dir"/k_mod.img /new_root/kernel_modules
 /bin/mount --move /sys /new_root/sys
 /bin/mount --move /rofs_root /new_root/rofs_root
 /bin/mount --move /boot_disk /new_root/boot_disk
