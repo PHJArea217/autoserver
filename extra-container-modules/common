@@ -7,13 +7,17 @@ set -eux
 mount -t tmpfs -o mode=0755 none /proc/driver
 exec 3<../busybox-builder
 cd /proc/driver
-mkdir -p bin sbin lib socketbox src
+mkdir -p bin busybox src
 ln -s lib lib64
-bsdtar -xC bin --strip-components 1 --no-fflags -f - < /proc/self/fd/3/busybox.tar.gz output_b
-bsdtar -xC src --strip-components 1 --no-fflags -f - < /proc/self/fd/3/busybox.tar.gz output_s
-bsdtar -xC sbin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/b
-bsdtar -xC lib --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/i
-bsdtar -xC socketbox --strip-components 1 --no-fflags -f /proc/self/fd/3/busybox.tar.gz _socketbox
+bsdtar -xC bin --strip-components 1 --no-fflags -f - < /proc/self/fd/3/__ctr-scripts.tar.gz amd64
+bsdtar -xC src --strip-components 1 --no-fflags -f - < /proc/self/fd/3/__c_sources.tar.gz __build_root_r
+bsdtar -xC busybox --strip-components 1 --no-fflags -f - < /proc/self/fd/3/__busybox_n.tar.gz amd64
+# bsdtar -xC sbin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/b
+# bsdtar -xC lib --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/i
+# bsdtar -xC socketbox --strip-components 1 --no-fflags -f /proc/self/fd/3/busybox.tar.gz _socketbox
+ln -s bin socketbox
+ln -s ../busybox/busybox-d bin/busybox-d
+ln -s ../busybox/busybox-s bin/busybox-s
 bsdtar -cf /_ctr-script-build-output_"$1"/_system/rootfs.tar .
 EOF
 }
