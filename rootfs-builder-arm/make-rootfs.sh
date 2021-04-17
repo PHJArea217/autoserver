@@ -46,4 +46,5 @@ lxc-utils
 
 RUN mv /lib/systemd/system /lib/systemd/system_dist && mkdir /lib/systemd/system
 EOF
-docker run --rm -v /docker-buildout/autoserver-arm:/build-output autoserver-rootfs sh -c 'bsdtar -czf - /etc /usr /var > /build-output/rootfs.tar.gz'
+docker build -t autoserver-arm-rootfs tmp/
+docker run --rm -v /docker-buildout/autoserver-arm:/build-output autoserver-arm-rootfs sh -c 'bsdtar -czf - /etc /usr /var > /build-output/rootfs.tar.gz'
