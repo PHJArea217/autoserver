@@ -1,7 +1,7 @@
 #!/bin/sh
 
 set -eu
-
+mkdir -p tmp
 cat /usr/bin/qemu-arm-static > tmp/qemu-arm-static
 chmod +x tmp/qemu-arm-static
 cat > tmp/Dockerfile <<\EOF
@@ -9,7 +9,7 @@ cat > tmp/Dockerfile <<\EOF
 FROM arm32v7/ubuntu:20.04
 
 COPY qemu-arm-static /usr/bin/
-RUN dpkg-divert --add --divert-to /usr/bin/qemu-arm-static.arm /usr/bin/qemu-arm-static
+RUN dpkg-divert --add --divert /usr/bin/qemu-arm-static.arm /usr/bin/qemu-arm-static
 RUN apt-get update && apt-get install -y ca-certificates
 RUN sed -i "s,http://\(archive\|security\)\.ubuntu\.com/,https://mirrors.edge.kernel.org/,g" /etc/apt/sources.list && \
 	rm -f /etc/dpkg/dpkg.cfg.d/excludes && apt-get update && apt-get -y --no-install-recommends dist-upgrade
