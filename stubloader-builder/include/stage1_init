@@ -41,6 +41,9 @@ if :; then
 	ln -s usr/lib64 lib64
 	ln -s usr/libx32 libx32
 	ln -s usr/sbin sbin
+	ln -s rofs_root/home home
+	ln -s rofs_root/root root
+	ln -s rofs_root/opt opt
 	if [ ! -e etc/alternatives ]; then
 		ln -s /rofs_root/etc/alternatives etc/alternatives
 	fi
