@@ -5,7 +5,7 @@ set -eu
 mount -t tmpfs -o mode=0700 none /tmp
 M_TMPDIR="$(mktemp -d)"
 chmod 755 "$M_TMPDIR"
-bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xattrs --chroot -f "rootfs.tar.gz"
+bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xattrs -f "rootfs.tar.gz"
 (
 set -eu
 cd "$M_TMPDIR"
