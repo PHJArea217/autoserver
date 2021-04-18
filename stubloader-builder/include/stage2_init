@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+trap 'exec /bin/sh' EXIT
+[ -r /__autoserver__/local/scripts/stage3_local_pre ] && . /__autoserver__/local/scripts/stage3_local_pre
+/__autoserver__/scripts/stage2_include
+[ -r /__autoserver__/local/scripts/stage3_local_post ] && . /__autoserver__/local/scripts/stage3_local_post
+exec /__autoserver__/bin/ctrtool init \
+-n /static/sh -C /dev/tty1 -r 1 \
+-n /static/sh -C /dev/tty2 -r 1 \
+-n /static/sh -C /dev/tty3 -r 1 \
+-n /static/sh -C /dev/tty4 -r 1 \
+-n /static/sh -C /dev/tty5 -r 1 \
+-n /static/sh -C /dev/tty6 -r 1 \
+-s 10 -a 3 \
+-s 12 -a 2 \
+-s 15 -a 1

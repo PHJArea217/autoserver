@@ -1,0 +1,63 @@
+#!/bin/sh
+set -eu
+# trap 'exec /bin/sh' EXIT
+
+[ -c /dev/null ]
+
+modprobe fuse
+modprobe tun
+/__autoserver__/bin/ctrtool mount_seq \
+-D /run -D /dev/__container-devices__ -M 0755 \
+-m /dev/pts -E -t devpts -o mode=0600 \
+-m /dev/mqueue -E -t mqueue \
+-m /dev/hugepages -Et hugetlbfs -ek \
+-m /run -t tmpfs -o mode=0755,size=100M \
+-D /run/lock -D /run/shm \
+-D /run/sshd -M 0755 \
+-D /run/syslog -M 0755 \
+-m /run/lock -t tmpfs -o size=10M \
+-m /run/shm -t tmpfs \
+-m /sys/fs/cgroup -t tmpfs -o size=1M,mode=0755 \
+-c /sys/fs/cgroup \
+-m autoserver_user -Et cgroup -o none,name=autoserver_user \
+-m blkio -Et cgroup -o blkio \
+-m cpu -Et cgroup -o cpu \
+-m cpuacct -Et cgroup -o cpuacct \
+-m cpuset -Et cgroup -o cpuset \
+-m devices -Et cgroup -o devices \
+-m freezer -Et cgroup -o freezer \
+-m memory -Et cgroup -o memory \
+-m net_cls -Et cgroup -o net_cls \
+-m net_prio -Et cgroup -o net_prio \
+-m perf_event -Et cgroup -o perf_event \
+-m pids -Et cgroup -o pids \
+-m rdma -Et cgroup -o rdma \
+-m systemd -Et cgroup -o none,name=systemd,xattr \
+-m unified -Et cgroup2 -o nsdelegate \
+-c / \
+-m /sys/kernel/debug -t debugfs -o mode=0700 -ek \
+-m /sys/kernel/security -t securityfs -ek \
+-m /sys/fs/pstore -t pstore -ek \
+-m /sys/fs/bpf -t bpf -ek \
+-m /proc/sys/fs/binfmt_misc -t binfmt_misc -ek \
+-m /sys/fs/fuse/connections -t fusectl -ek
+
+for x in full null random tty urandom zero; do
+	/static/ln /dev/"$x" /dev/__container-devices__/"$x"
+done
+
+/static/ln -s /run/shm /dev/shm
+/static/ln -s /run/shm /tmp
+
+/lib/systemd/systemd-udevd --daemon
+
+udevadm trigger -t subsystems -c add
+udevadm trigger -t devices -c add
+# It's up to the end scripts to run "udevadm settle"
+
+if [ "1" = "${autoserver_wait_udev:-0}" ]; then
+	udevadm settle || :
+fi
+
+/sbin/ldconfig.real -X
+
