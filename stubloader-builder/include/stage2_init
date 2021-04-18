@@ -6,7 +6,7 @@ trap 'exec /bin/sh' EXIT
 [ -r /__autoserver__/local/scripts/stage3_local_pre ] && . /__autoserver__/local/scripts/stage3_local_pre
 /__autoserver__/scripts/stage2_include
 [ -r /__autoserver__/local/scripts/stage3_local_post ] && . /__autoserver__/local/scripts/stage3_local_post
-exec /__autoserver__/bin/ctrtool init \
+exec /__autoserver__/bin/ctrtool-static init \
 -n /static/sh -C /dev/tty1 -r 1 \
 -n /static/sh -C /dev/tty2 -r 1 \
 -n /static/sh -C /dev/tty3 -r 1 \
