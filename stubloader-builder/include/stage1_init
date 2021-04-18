@@ -26,11 +26,14 @@ if :; then
 		sh -c "$autoserver_local_disk_mount_cmd" - "/__autoserver__/new_root/local_disk"
 	fi
 	mkdir /__autoserver__/new_root/rofs_root
-	modprobe squashfs
-	modprobe loop
+	modprobe squashfs || :
+	modprobe loop || :
 	mount -t squashfs -o loop,ro,nosuid,nodev /__autoserver__/img/system.img /__autoserver__/new_root/rofs_root
 	cd /__autoserver__/new_root
 	mkdir boot_disk dev etc proc static sys
+	mount -t proc -o nosuid,nodev,noexec none proc
+	mount -t sysfs -o nosuid,nodev,noexec none sys
+	mount -t devtmpfs -o nosuid,noexec none dev
 	ln -s rofs_root/usr usr
 	ln -s usr/bin bin
 	ln -s usr/lib lib
@@ -46,6 +49,7 @@ if :; then
 	ln -s busybox static/sh
 	pivot_root . boot_disk
 	cd /
+	trap 'exec /boot_disk/__autoserver__/bin/busybox' EXIT
 	umount -l /boot_disk/proc /boot_disk/sys /boot_disk/dev /boot_disk/run
 	exec "/__autoserver__/bin/autoserver_init"
 fi

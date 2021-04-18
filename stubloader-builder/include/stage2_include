@@ -1,9 +1,8 @@
 #!/bin/sh
-set -eu
 # trap 'exec /bin/sh' EXIT
-
+set -e
 [ -c /dev/null ]
-
+set +e
 modprobe fuse
 modprobe tun
 /__autoserver__/bin/ctrtool mount_seq \
@@ -41,6 +40,16 @@ modprobe tun
 -m /sys/fs/bpf -t bpf -ek \
 -m /proc/sys/fs/binfmt_misc -t binfmt_misc -ek \
 -m /sys/fs/fuse/connections -t fusectl -ek
+
+case "$?" in
+	0|2)
+		;;
+	*)
+		exit 1
+		;;
+esac
+
+set -eu
 
 for x in full null random tty urandom zero; do
 	/static/ln /dev/"$x" /dev/__container-devices__/"$x"

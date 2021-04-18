@@ -11,7 +11,7 @@ case "${T_ARCH:=amd64}" in
 esac
 
 mount -t tmpfs -o mode=0755 none /proc/driver
-mkdir -p /proc/driver/stage2_fs/bin /proc/driver/stage1_fs/__autoserver__/bin /proc/driver/stage1_fs/__autoserver__/src
+mkdir -p /proc/driver/stage2_fs/bin /proc/driver/stage1_fs/__autoserver__/bin /proc/driver/stage1_fs/__autoserver__/src /proc/driver/stage1_fs/__autoserver__/local
 tar -xzOf - "./$T_ARCH_S/busybox-s" < ../busybox-builder/__busybox_n.tar.gz > /proc/driver/stage1_fs/__autoserver__/bin/busybox
 chmod +x /proc/driver/stage1_fs/__autoserver__/bin/busybox
 cat ../busybox-builder/__c_sources.tar.gz > /proc/driver/stage1_fs/__autoserver__/src/c_sources.tar.gz
@@ -20,9 +20,11 @@ tar -xzC /proc/driver/stage2_fs/bin --strip-components 2 -f - "./$T_ARCH_S/busyb
 tar -xzC /proc/driver/stage2_fs/bin --strip-components 2 -f - "./$T_ARCH_S/ctrtool" "./$T_ARCH_S/ctrtool-static" < ../busybox-builder/__ctr-scripts.tar.gz
 
 cat include/stage1_init > /proc/driver/stage1_fs/__autoserver__/bin/_init
+cat include/local_env_example > /proc/driver/stage1_fs/__autoserver__/local/env
 cat include/stage2_init > /proc/driver/stage2_fs/bin/autoserver_init
 mkdir /proc/driver/stage2_fs/kernel_modules /proc/driver/stage2_fs/scripts
 cat include/stage2_include > /proc/driver/stage2_fs/scripts/stage2_include
+cat include/start-inner-system.py > /proc/driver/stage2_fs/scripts/start-inner-system.py
 chmod +x /proc/driver/stage2_fs/scripts/stage2_include
 
 ln -s /local_disk/__system__/lib/modules /proc/driver/stage2_fs/kernel_modules

@@ -3,6 +3,7 @@
 set -eu
 
 trap 'exec /bin/sh' EXIT
+exec </dev/console >/dev/console 2>&1
 [ -r /__autoserver__/local/scripts/stage3_local_pre ] && . /__autoserver__/local/scripts/stage3_local_pre
 /__autoserver__/scripts/stage2_include
 [ -r /__autoserver__/local/scripts/stage3_local_post ] && . /__autoserver__/local/scripts/stage3_local_post

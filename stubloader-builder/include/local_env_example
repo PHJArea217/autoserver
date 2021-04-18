@@ -1,0 +1,2 @@
+# Replace the mmcblk0p2 if necessary
+autoserver_local_disk_mount_cmd='mount -t ext4 /dev/mmcblk0p2 "$1"'
