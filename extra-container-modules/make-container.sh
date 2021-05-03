@@ -19,7 +19,7 @@ RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive 
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends htop less strace nginx-extras fcgiwrap apache2 python3 \
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm \
-php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \
+pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \
 qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf \
 qemu-utils sa-compile shared-mime-info spamc curl && rm -rf /etc/ssl/private /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
