@@ -29,4 +29,5 @@ EOF
 docker run --rm -v /_ctr-script-build-output_4/throwaway:/build_out --entrypoint= -u root ctr-script-throwaway /bin/sh -c 'tar c /bin /etc /lib /lib64 /sbin /usr /var > /build_out/rootfs.tar'
 
 . ./common
+write_system 4 100000
 do_build_output 4 55564
