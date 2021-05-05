@@ -22,7 +22,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ht
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm \
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \
 qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \
-qemu-utils sa-compile shared-mime-info spamc curl cgit fcgiwrap python3-markdown rsyslog && \
+qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown rsyslog iptables && \
 rm -rf /etc/ssl/private /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-ctype php-curl \
