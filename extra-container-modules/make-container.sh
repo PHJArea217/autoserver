@@ -15,13 +15,15 @@ umask 022
 
 docker build -t ctr-script-generic - <<\EOF
 FROM ubuntu:20.04
-RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates
+RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates && \
+sed -i 's#http://\(archive\|security\)\.ubuntu\.com/#https://mirrors.edge.kernel.org/#g' /etc/apt/sources.list && apt-get update && apt-get -y dist-upgrade
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends htop less strace nginx-extras fcgiwrap apache2 python3 \
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm \
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \
 qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \
-qemu-utils sa-compile shared-mime-info spamc curl cgit fcgiwrap python3-markdown && rm -rf /etc/ssl/private /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
+qemu-utils sa-compile shared-mime-info spamc curl cgit fcgiwrap python3-markdown rsyslog && \
+rm -rf /etc/ssl/private /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-ctype php-curl \
 php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter
