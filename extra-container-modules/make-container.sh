@@ -20,7 +20,7 @@ case "$T_ARCH" in
 	arm32)
 		BASE_IMAGE=arm32v7/ubuntu:20.04
 		GITEA_ARCH=arm-6
-		FILE_ARCH=armhf
+		FILE_ARCH=arm32
 		;;
 	arm64)
 		BASE_IMAGE=arm64v8/ubuntu:20.04
@@ -68,5 +68,5 @@ docker build -t ctr-script-generic tmp/
 docker run --rm -v /_ctr-script-build-output_1/generic:/build_out --entrypoint= -u root ctr-script-generic /bin/sh -c 'tar c /bin /etc /extras /lib /lib64 /opt /sbin /usr /var > /build_out/rootfs.tar'
 
 . ./common
-write_system 1 100000
+write_system 1 100000 "$FILE_ARCH"
 do_build_output 1 55561
