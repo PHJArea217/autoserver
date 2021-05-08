@@ -32,6 +32,7 @@ mkdir -p tmp
 cp /usr/bin/qemu-arm-static /usr/bin/qemu-aarch64-static tmp/
 cat > tmp/Dockerfile <<EOF
 FROM $BASE_IMAGE
+COPY qemu-arm-static qemu-aarch64-static /usr/bin/
 RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates && \\
 sed -i 's#http://\\(archive\\|security\\)\\.ubuntu\\.com/#https://mirrors.edge.kernel.org/#g' /etc/apt/sources.list && apt-get update && apt-get -y dist-upgrade
 
