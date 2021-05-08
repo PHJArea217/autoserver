@@ -45,6 +45,8 @@ qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg li
 qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown rsyslog iptables && \\
 rm -rf /etc/ssl/private /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
+RUN c_rehash /etc/ssl/certs
+
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-ctype php-curl \\
 php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter
 
