@@ -2,16 +2,16 @@
 write_system() {
 	mkdir -p /_ctr-script-build-output_"$1"/_system
 	chown "$2:$2" /_ctr-script-build-output_"$1"/_system
-	setpriv --reuid="$2" --regid="$2" --clear-groups --no-new-privs unshare -r -m --propagation=slave sh -s "$1" <<\EOF
+	setpriv --reuid="$2" --regid="$2" --clear-groups --no-new-privs unshare -r -m --propagation=slave sh -s "$1" "${3:-amd64}" <<\EOF
 set -eux
 mount -t tmpfs -o mode=0755 none /proc/driver
 exec 3<../busybox-builder
 cd /proc/driver
 mkdir -p bin busybox src
 ln -s lib lib64
-bsdtar -xC bin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__ctr-scripts.tar.gz amd64
+bsdtar -xC bin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__ctr-scripts.tar.gz "$2"
 bsdtar -xC src --strip-components 1 --no-fflags -f - < /proc/self/fd/3/__c_sources.tar.gz __build_root_r
-bsdtar -xC busybox --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__busybox_n.tar.gz amd64
+bsdtar -xC busybox --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__busybox_n.tar.gz "$2"
 # bsdtar -xC sbin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/b
 # bsdtar -xC lib --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/i
 # bsdtar -xC socketbox --strip-components 1 --no-fflags -f /proc/self/fd/3/busybox.tar.gz _socketbox
@@ -45,6 +45,6 @@ for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	fi
 done
 cd /
-mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend -Xbcj x86
+mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend -Xbcj x86,arm,armthumb
 EOF
 }
