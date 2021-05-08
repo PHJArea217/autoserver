@@ -43,6 +43,22 @@ for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
 			:> etc/"$file"
 		done
 	fi
+	if [ "directory" = "`stat -c%F usr`" ]; then
+		if [ "directory" = "`stat -c%F usr/bin`" ]; then
+			cd usr/bin
+			if [ "regular file" = "`stat -c%F qemu-arm-static`" ]; then
+				if [ -f qemu-arm-static.distrib ]; then
+					mv -T qemu-arm-static.distrib qemu-arm-static
+				fi
+			fi
+			if [ "regular file" = "`stat -c%F qemu-aarch64-static`" ]; then
+				if [ -f qemu-aarch64-static.distrib ]; then
+					mv -T qemu-aarch64-static.distrib qemu-aarch64-static
+				fi
+			fi
+		fi
+	fi
+	cd /proc/driver
 done
 cd /
 mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend -Xbcj x86,arm,armthumb
