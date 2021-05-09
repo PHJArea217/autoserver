@@ -61,6 +61,6 @@ for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	cd /proc/driver
 done
 cd /
-mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend -Xbcj x86,arm,armthumb
+mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend
 EOF
 }
