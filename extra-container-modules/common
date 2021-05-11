@@ -32,6 +32,7 @@ mkdir /_ctr-script-build-output_"$1"/_output/tmp
 mount --bind /_ctr-script-build-output_"$1"/_output/tmp /proc/driver
 # mount -t tmpfs -o mode=0755,size=4g none /proc/driver
 for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
+	[ "regular file" = "`stat -c%F "$x"`" ] || sh -c 'printf >&2 "%s is not a regular file\n" "$1"; exit 1' - "$x"
 	RESULT="${x%%/rootfs.tar}"
 	RESULT="${RESULT##/_ctr-script-build-output*/}"
 	mkdir -p "/proc/driver/$RESULT"
@@ -61,6 +62,6 @@ for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	cd /proc/driver
 done
 cd /
-mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend -Xbcj x86,arm,armthumb
+mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend
 EOF
 }

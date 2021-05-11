@@ -20,7 +20,7 @@ case "$T_ARCH" in
 	arm32)
 		BASE_IMAGE=arm32v7/ubuntu:20.04
 		GITEA_ARCH=arm-6
-		FILE_ARCH=armhf
+		FILE_ARCH=arm32
 		;;
 	arm64)
 		BASE_IMAGE=arm64v8/ubuntu:20.04
@@ -38,12 +38,14 @@ sed -i 's#http://\\(archive\\|security\\)\\.ubuntu\\.com/#https://mirrors.edge.k
 
 RUN dpkg-divert --add --no-rename /usr/bin/qemu-arm-static && dpkg-divert --add --no-rename /usr/bin/qemu-aarch64-static
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends htop less strace nginx-extras fcgiwrap apache2 python3 \\
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends apt-utils htop less strace nginx-extras fcgiwrap apache2 python3 \\
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm \\
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \\
 qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \\
 qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown rsyslog iptables && \\
 rm -rf /etc/ssl/private /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
+
+RUN c_rehash /etc/ssl/certs && mkdir -p /lib64
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-ctype php-curl \\
 php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter
@@ -66,5 +68,5 @@ docker build -t ctr-script-generic tmp/
 docker run --rm -v /_ctr-script-build-output_1/generic:/build_out --entrypoint= -u root ctr-script-generic /bin/sh -c 'tar c /bin /etc /extras /lib /lib64 /opt /sbin /usr /var > /build_out/rootfs.tar'
 
 . ./common
-write_system 1 100000
+write_system 1 100000 "$FILE_ARCH"
 do_build_output 1 55561
