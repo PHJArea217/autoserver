@@ -43,7 +43,8 @@ postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-s
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip \\
 qemu-system-x86 qemu-user-static opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \\
 qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown python3-pygments rsyslog iptables && \\
-rm -rf /etc/ssl/private /etc/unbound/*.pem /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
+rm -rf /etc/ssl/private /etc/unbound/*.pem /etc/unbound/*.key /etc/ssl/certs/ca-certificates.crt \\
+/etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
 RUN c_rehash /etc/ssl/certs && mkdir -p /lib64
 
