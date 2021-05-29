@@ -63,7 +63,7 @@ if [ "1" = "${DO_SHELL:-0}" ]; then
 	exec sh -c 'exec /bin/bash </dev/tty'
 	exit 1
 fi
-exec setpriv --bounding-set=-all env - sh -s quick-brown-fox < /build-busybox_s.sh
+exec setpriv --bounding-set=-all env - sh /build-busybox_s.sh quick-brown-fox </dev/null
 EOF
 mv __busybox_n.tar.gz.tmp __busybox_n.tar.gz
 mv __ctr-scripts.tar.gz.tmp __ctr-scripts.tar.gz
