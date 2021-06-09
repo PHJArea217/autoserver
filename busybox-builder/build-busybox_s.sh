@@ -36,7 +36,7 @@ make -C ctr-scripts_arm32/ctrtool CROSS_COMPILE=arm-linux-gnueabihf- CC=arm-linu
 make -C ctr-scripts_arm32/bind-anywhere CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar CFLAGS='-O3 -g -fstack-protector-strong -fvisibility=hidden -fstack-clash-protection -D_FORTIFY_SOURCE=2 -fPIC' -j 4 4>&- 3>&-
 make -C socketbox_arm32 CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar CFLAGS='-Wall -O2 -fstack-protector-strong -fvisibility=hidden -fstack-clash-protection -D_FORTIFY_SOURCE=2 -fPIC' -j 4 4>&- 3>&-
 
-mkdir /bin_out_a /bin_out_a/amd64 /bin_out_a/aarch64 /bin_out_a/arm32
+mkdir /bin_out_a /bin_out_a/amd64 /bin_out_a/aarch64 /bin_out_a/arm32 /bin_out_a/generic
 
 strip -o /bin_out_a/amd64/ctrtool ctr-scripts_x86/ctrtool/ctrtool
 strip -o /bin_out_a/amd64/ctrtool-static ctr-scripts_x86/ctrtool/ctrtool-static
@@ -57,6 +57,10 @@ for x in libsocketbox-preload.so socket-query socketbox socketbox-inetd socketbo
 done
 
 chmod -x /bin_out_a/amd64/*.so /bin_out_a/aarch64/*.so /bin_out_a/arm32/*.so
+
+git clone /build_root_r/python-socketbox /bin_out_a/generic/python-socketbox
+
+ln -sT socketbox_main.py /bin_out_a/generic/python-socketbox/__init__.py
 
 bsdtar -cz -C /bin_out_a -f - --uid 0 --gid 0 . > /dev/fd/4
 
