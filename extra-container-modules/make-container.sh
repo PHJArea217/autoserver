@@ -46,7 +46,9 @@ qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown python3-
 rm -rf /etc/ssl/private /etc/unbound/*.pem /etc/unbound/*.key /etc/ssl/certs/ca-certificates.crt /etc/docker/key.json \\
 /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
-RUN c_rehash /etc/ssl/certs && mkdir -p /lib64
+RUN c_rehash /etc/ssl/certs && mkdir -p /lib64 && \\
+	update-alternatives --set iptables /usr/sbin/iptables-nft && \\
+	update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-ctype php-curl \\
 php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter
