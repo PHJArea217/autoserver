@@ -26,7 +26,7 @@ openssh-sftp-server openssl openvpn p7zip-full parted passwd patch pciutils post
 printer-driver-gutenprint printer-driver-hpcups printer-driver-postscript-hp procps psmisc pulseaudio \
 pulseaudio-utils python python3 qemu qemu-block-extra qemu-system qemu-user qemu-user-static qemu-utils radvd rsyslog \
 rtkit runc screen seabios sharutils socat sox squashfs-tools ssh-import-id strace sudo systemd thermald tmux \
-traceroute tshark u-boot-tools udev udisks2 usb-modeswitch usbmuxd util-linux vim-nox vsftpd wamerican wget \
+traceroute tshark u-boot-tools udev udisks2 unbound usb-modeswitch usbmuxd util-linux vim-nox vsftpd wamerican wget \
 wireless-regdb wireless-tools wodim wpasupplicant xserver-xorg-core xserver-xorg-input-all xserver-xorg-video-all xterm xxd xz-utils zsh && \
 rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc/ssl/private/ssl-cert-snakeoil.key \
 	/etc/unbound/*.pem /etc/unbound/*.key \
@@ -37,7 +37,7 @@ rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends linux-firmware build-essential make
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends isolinux syslinux syslinux-utils syslinux-common \
-gpsd gpsd-clients pps-tools bird quagga-core quagga-bgpd amd64-microcode intel-microcode conntrack unbound wireguard-tools slirp4netns \
+gpsd gpsd-clients pps-tools bird quagga-core quagga-bgpd amd64-microcode intel-microcode conntrack wireguard-tools slirp4netns \
 lxc-utils
 
 RUN mv /lib/systemd/system /lib/systemd/system_dist && mkdir /lib/systemd/system
