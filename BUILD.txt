@@ -1,6 +1,6 @@
 All scripts are to be run by a user other than root and with the working directory in the same directory as the script unless otherwise specified.
 1. linux-builder/build_linux.sh
-2. busybox-builder/make-busybox.sh (root)
+2. busybox-builder/build_busybox.sh
 3. rootfs-builder/make-rootfs.sh (root)
 4. rootfs-builder/build-rootfs.sh
 5. initramfs-builder/build-initramfs.sh
