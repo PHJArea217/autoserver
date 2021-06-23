@@ -4,15 +4,22 @@ set -eu
 # Initramfs
 T_ARCH_S=""
 
+
+
 case "${T_ARCH:=amd64}" in
-	amd64|aarch64|arm32)
+	aarch64|arm32)
 		T_ARCH_S="$T_ARCH"
+		ASM_ARCH=arm32
+		;;
+	amd64)
+		T_ARCH_S="amd64"
+		ASM_ARCH=i686
 		;;
 esac
 
 export T_ARCH_S
 
-unshare -r -m --propagation=slave <<\EOF
+unshare -r -m --propagation=slave sh -s "$ASM_ARCH" <<\EOF
 set -eu
 mount -t tmpfs -o mode=0755 none /proc/driver
 mkdir -p /proc/driver/initramfs/bin /proc/driver/initramfs/__autoserver__/
@@ -23,13 +30,18 @@ cp vtrgb.S /proc/driver/vtrgb.S
 cp vtrgb_arm.S /proc/driver/vtrgb_arm.S
 ( cd /proc/driver
 
-x86_64-linux-gnu-as --32 -o vtrgb.o vtrgb.S
-x86_64-linux-gnu-ld -m elf_i386 --omagic -o vtrgb vtrgb.o
-x86_64-linux-gnu-strip -o initramfs/__autoserver__/vtrgb vtrgb
-
-arm-linux-gnueabihf-as -o vtrgb_arm.o vtrgb_arm.S
-arm-linux-gnueabihf-ld --omagic -o vtrgb_arm vtrgb_arm.o
-arm-linux-gnueabihf-strip -o initramfs/__autoserver__/vtrgb_arm vtrgb_arm
+case "$1" in
+	i686)
+		x86_64-linux-gnu-as --32 -o vtrgb.o vtrgb.S
+		x86_64-linux-gnu-ld -m elf_i386 --omagic -o vtrgb vtrgb.o
+		x86_64-linux-gnu-strip -o initramfs/__autoserver__/vtrgb vtrgb
+		;;
+	arm32)
+		arm-linux-gnueabihf-as -o vtrgb_arm.o vtrgb_arm.S
+		arm-linux-gnueabihf-ld --omagic -o vtrgb_arm vtrgb_arm.o
+		arm-linux-gnueabihf-strip -o initramfs/__autoserver__/vtrgb vtrgb
+		;;
+esac
 )
 ( cd /proc/driver/initramfs
 mkdir boot_disk dev etc new_root proc rofs_root sys
