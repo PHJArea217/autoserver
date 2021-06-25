@@ -17,7 +17,9 @@ fi
 
 touch __build_root_r/_busybox_done
 
-sh -c 'set -eu; cd __build_root_r; for x in socketbox container-scripts python-socketbox; do [ ! -d "$x"/.git ] && git clone --no-checkout https://git.internal.peterjin.org/_/"$x"; done; exit 0'
+# If you're not part of the peterjin.org network, change the second line below to https://git2.peterjin.org to use our public Git server instead.
+sh -c 'set -eu; cd __build_root_r; for x in socketbox container-scripts python-socketbox; do [ ! -d "$x"/.git ] && git clone --no-checkout "$1"/"$x"; done; exit 0' _ \
+	https://git.internal.peterjin.org/_
 
 bsdtar -czf __c_sources.tar.gz --uid 0 --gid 0 __build_root_r/container-scripts __build_root_r/socketbox
 
