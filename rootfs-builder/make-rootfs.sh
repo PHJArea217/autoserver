@@ -39,7 +39,7 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommend
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends isolinux syslinux syslinux-utils syslinux-common \
 gpsd gpsd-clients pps-tools bird quagga-core quagga-bgpd amd64-microcode intel-microcode conntrack wireguard-tools slirp4netns \
-lxc-utils
+lxc-utils grub-pc-bin grub-efi-amd64-bin grub2-common
 
 RUN mv /lib/systemd/system /lib/systemd/system_dist && mkdir /lib/systemd/system
 EOF
