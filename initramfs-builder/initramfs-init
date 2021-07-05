@@ -4,6 +4,10 @@ set -eu
 [ 1 = "$$" ]
 trap 'exec /bin/sh' EXIT
 
+if [ 1 -eq "${autoserver_check_initrd:-1}" ]; then
+	[ ! -f /initrd.image ]
+fi
+
 : "${autoserver_dir:=autosvr}"
 
 cd /
@@ -33,9 +37,44 @@ done
 /bin/mount -t "${autoserver_boot_fstype:-vfat}" -o "${autoserver_boot_opts:-ro}" "$autoserver_boot_dev" "/boot_disk"
 /bin/mount -t squashfs -o ro,nosuid,nodev /boot_disk/"$autoserver_dir"/system.img /rofs_root
 
-for x in /boot_disk/"$autoserver_dir"/*.txz; do
-	/usr/bin/bsdtar -xC /new_root --chroot -f "$x"
-done
+case "${autoserver_safe_mode:=0}" in
+	2)
+		for x in /boot_disk/"$autoserver_dir"/0_base.txz; do
+			/usr/bin/bsdtar -xC /new_root -f "$x"
+		done
+		;;
+	1)
+		for x in /boot_disk/"$autoserver_dir"/0*.txz; do
+			/usr/bin/bsdtar -xC /new_root -f "$x"
+		done
+		;;
+	0)
+		for x in /boot_disk/"$autoserver_dir"/*.txz; do
+			/usr/bin/bsdtar -xC /new_root -f "$x"
+		done
+		if [ -d /root_modules ]; then
+			for x in /root_modules/*.manifest; do
+				if [ -s "$x" ]; then
+					TAR_FILE="${x%.manifest}.tar"
+					if sha256sum "$TAR_FILE" | grep -q "$(cat "$x") "; then
+						/usr/bin/bsdtar -xC /new_root -f "$TAR_FILE"
+					else
+						printf '%s has incorrect checksum\n' "$TAR_FILE"
+						false
+					fi
+				else
+					printf '%s is empty; possible decompression error\n' "$x"
+					false
+				fi
+			done
+		fi
+		;;
+	*)
+		printf 'Invalid value for autoserver_safe_mode: %s\n' "$autoserver_safe_mode"
+		false
+		;;
+esac
+
 mkdir -p /new_root/proc /new_root/sys /new_root/dev /new_root/rofs_root /new_root/boot_disk /new_root/kernel_modules
 
 cd /
