@@ -19,20 +19,6 @@ modprobe fuse
 -m /run/shm -t tmpfs \
 -m /sys/fs/cgroup -t tmpfs -o size=1M,mode=0755 \
 -c /sys/fs/cgroup \
--m autoserver_user -Et cgroup -o none,name=autoserver_user \
--m blkio -Et cgroup -o blkio \
--m cpu -Et cgroup -o cpu \
--m cpuacct -Et cgroup -o cpuacct \
--m cpuset -Et cgroup -o cpuset \
--m devices -Et cgroup -o devices \
--m freezer -Et cgroup -o freezer \
--m memory -Et cgroup -o memory \
--m net_cls -Et cgroup -o net_cls \
--m net_prio -Et cgroup -o net_prio \
--m perf_event -Et cgroup -o perf_event \
--m pids -Et cgroup -o pids \
--m rdma -Et cgroup -o rdma \
--m systemd -Et cgroup -o none,name=systemd,xattr \
 -m unified -Et cgroup2 -o nsdelegate \
 -c / \
 -m /sys/kernel/debug -t debugfs -o mode=0700 -ek \
@@ -41,6 +27,28 @@ modprobe fuse
 -m /sys/fs/bpf -t bpf -ek \
 -m /proc/sys/fs/binfmt_misc -t binfmt_misc -ek \
 -m /sys/fs/fuse/connections -t fusectl -ek
+
+if [ "1" = "${autoserver_cgroupv1:-1}" ]; then
+	/__autoserver__/ctrtool mount_seq -c /sys/fs/cgroup \
+		-m blkio -Et cgroup -o blkio \
+		-m cpu -Et cgroup -o cpu \
+		-m cpuacct -Et cgroup -o cpuacct \
+		-m cpuset -Et cgroup -o cpuset \
+		-m devices -Et cgroup -o devices \
+		-m freezer -Et cgroup -o freezer \
+		-m memory -Et cgroup -o memory \
+		-m net_cls -Et cgroup -o net_cls \
+		-m net_prio -Et cgroup -o net_prio \
+		-m perf_event -Et cgroup -o perf_event \
+		-m pids -Et cgroup -o pids \
+		-m rdma -Et cgroup -o rdma \
+fi
+
+if [ "1" = "${autoserver_cgroupv1_named:-1}" ]; then
+	/__autoserver__/ctrtool mount_seq -c /sys/fs/cgroup \
+		-m autoserver_user -Et cgroup -o none,name=autoserver_user,xattr
+		-m systemd -Et cgroup -o none,name=systemd,xattr
+fi
 
 for x in full null random tty urandom zero; do
 	/static/ln /dev/"$x" /dev/__container-devices__/"$x"
