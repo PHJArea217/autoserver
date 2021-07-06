@@ -12,8 +12,8 @@ fi
 
 cd /
 export PATH=/bin
-/bin/mount -t proc -o nosuid,nodev,noexec none /proc
 /bin/mount -t tmpfs -o mode=0755 none /new_root
+/bin/mount -t proc -o nosuid,nodev,noexec none /proc
 /bin/mount -t sysfs -o nosuid,nodev,noexec none /sys
 /bin/mount -t devtmpfs -o nosuid,noexec none /dev
 
