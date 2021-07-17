@@ -2,7 +2,9 @@
 
 unshare -r -m --propagation=slave sh <<\EOF
 set -eu
-mount -t tmpfs -o mode=0700 none /tmp
+# mount -t tmpfs -o mode=0700 none /tmp
+mkdir _tmp
+mount --bind _tmp /tmp
 M_TMPDIR="$(mktemp -d)"
 chmod 755 "$M_TMPDIR"
 bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xattrs --exclude 'var/lib/apt/lists/*' -f "rootfs.tar.gz"
