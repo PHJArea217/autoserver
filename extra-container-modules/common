@@ -1,7 +1,7 @@
 #!/bin/sh
 write_system() {
-	mkdir -p /_ctr-script-build-output_"$1"/_system
-	chown "$2:$2" /_ctr-script-build-output_"$1"/_system
+	mkdir -p /_autoserver/_ctr-script-build-output_"$1"/_system
+	chown "$2:$2" /_autoserver/_ctr-script-build-output_"$1"/_system
 	setpriv --reuid="$2" --regid="$2" --clear-groups --no-new-privs unshare -r -m --propagation=slave sh -s "$1" "${3:-amd64}" <<\EOF
 set -eux
 mount -t tmpfs -o mode=0755 none /proc/driver
@@ -19,23 +19,23 @@ bsdtar -xC busybox --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__bus
 ln -s bin socketbox
 ln -s ../busybox/busybox-d bin/busybox-d
 ln -s ../busybox/busybox-s bin/busybox-s
-bsdtar -cf /_ctr-script-build-output_"$1"/_system/rootfs.tar .
+bsdtar -cf /_autoserver/_ctr-script-build-output_"$1"/_system/rootfs.tar .
 EOF
 }
 do_build_output() {
 	set -eux
-	mkdir -p /_ctr-script-build-output_"$1"/_output
-	chown "$2:$2" /_ctr-script-build-output_"$1"/_output
+	mkdir -p /_autoserver/_ctr-script-build-output_"$1"/_output
+	chown "$2:$2" /_autoserver/_ctr-script-build-output_"$1"/_output
 	setpriv --reuid="$2" --regid="$2" --clear-groups --no-new-privs unshare -r -m --propagation=slave sh -s "$1" <<\EOF
 set -eux
-rm -rf /_ctr-script-build-output_"$1"/_output/tmp
-mkdir /_ctr-script-build-output_"$1"/_output/tmp
-mount --bind /_ctr-script-build-output_"$1"/_output/tmp /proc/driver
+rm -rf /_autoserver/_ctr-script-build-output_"$1"/_output/tmp
+mkdir /_autoserver/_ctr-script-build-output_"$1"/_output/tmp
+mount --bind /_autoserver/_ctr-script-build-output_"$1"/_output/tmp /proc/driver
 # mount -t tmpfs -o mode=0755,size=4g none /proc/driver
-for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
+for x in /_autoserver/_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	[ "regular file" = "`stat -c%F "$x"`" ] || sh -c 'printf >&2 "%s is not a regular file\n" "$1"; exit 1' - "$x"
 	RESULT="${x%%/rootfs.tar}"
-	RESULT="${RESULT##/_ctr-script-build-output*/}"
+	RESULT="${RESULT##/_autoserver/_ctr-script-build-output*/}"
 	mkdir -p "/proc/driver/$RESULT"
 	bsdtar -x --exclude 'var/cache/*' --exclude 'var/log/*' --exclude 'var/tmp/*' --exclude 'var/backups/*' --exclude 'var/lib/apt/lists/*' --exclude "etc/ssl/private/*" -C "/proc/driver/$RESULT" --no-same-owner --no-same-permissions --no-xattrs --no-acls -f "$x"
 	cd /proc/driver/"$RESULT"
@@ -63,6 +63,6 @@ for x in /_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	cd /proc/driver
 done
 cd /
-mksquashfs /proc/driver /_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend
+mksquashfs /proc/driver /_autoserver/_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend
 EOF
 }

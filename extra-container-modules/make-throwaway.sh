@@ -2,7 +2,7 @@
 
 set -eu
 umask 022
-
+mkdir -p /_autoserver
 docker build -t ctr-script-throwaway - <<\EOF
 FROM ubuntu:20.04
 RUN mkdir -p /usr/share/ca-certificates /usr/local/share/ca-certificates
@@ -27,7 +27,7 @@ RUN set -eu; export DEBIAN_FRONTEND=noninteractive; \
 	mv /usr/local /usr/_local && mkdir /usr/local && rm /etc/ssl/certs/ca-certificates.crt && dpkg-reconfigure ca-certificates
 RUN set -eu; export DEBIAN_FRONTEND=noninteractive; apt-get -y install imagemagick
 EOF
-docker run --rm -v /_ctr-script-build-output_4/throwaway:/build_out --entrypoint= -u root ctr-script-throwaway /bin/sh -c 'tar c /bin /etc /lib /lib64 /sbin /usr /var > /build_out/rootfs.tar'
+docker run --rm -v /_autoserver/_ctr-script-build-output_4/throwaway:/build_out --entrypoint= -u root ctr-script-throwaway /bin/sh -c 'tar c /bin /etc /lib /lib64 /sbin /usr /var > /build_out/rootfs.tar'
 
 . ./common
 write_system 4 100000

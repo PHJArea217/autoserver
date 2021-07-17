@@ -2,7 +2,7 @@
 
 set -eu
 umask 022
-
+mkdir -p /_autoserver
 # docker build -t ctr-script-matrix-synapse - <<\EOF
 # FROM ubuntu:20.04
 # RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates
@@ -16,16 +16,19 @@ umask 022
 BASE_IMAGE=ubuntu:20.04
 GITEA_ARCH=amd64
 FILE_ARCH=amd64
+NR=1
 case "$T_ARCH" in
 	arm32)
 		BASE_IMAGE=arm32v7/ubuntu:20.04
 		GITEA_ARCH=arm-6
 		FILE_ARCH=arm32
+		NR=5
 		;;
 	arm64)
 		BASE_IMAGE=arm64v8/ubuntu:20.04
 		GITEA_ARCH=arm64
 		FILE_ARCH=aarch64
+		NR=6
 		;;
 esac
 
@@ -70,9 +73,9 @@ EOF
 
 docker build -t ctr-script-generic tmp/
 
-# docker run --rm -v /_ctr-script-build-output_1/matrix-synapse:/build_out --entrypoint= -u root ctr-script-matrix-synapse /bin/sh -c 'tar c /bin /etc /lib /lib64 /opt /sbin /usr /var > /build_out/rootfs.tar'
-docker run --rm -v /_ctr-script-build-output_1/generic:/build_out --entrypoint= -u root ctr-script-generic /bin/sh -c 'tar c /bin /etc /extras /lib /lib64 /opt /sbin /usr /var > /build_out/rootfs.tar'
+# docker run --rm -v /_autoserver/_ctr-script-build-output_1/matrix-synapse:/build_out --entrypoint= -u root ctr-script-matrix-synapse /bin/sh -c 'tar c /bin /etc /lib /lib64 /opt /sbin /usr /var > /build_out/rootfs.tar'
+docker run --rm -v /_autoserver/_ctr-script-build-output_1/generic:/build_out --entrypoint= -u root ctr-script-generic /bin/sh -c 'tar c /bin /etc /extras /lib /lib64 /opt /sbin /usr /var > /build_out/rootfs.tar'
 
 . ./common
-write_system 1 100000 "$FILE_ARCH"
-do_build_output 1 55561
+write_system "$NR" 100000 "$FILE_ARCH"
+do_build_output "$NR" 55561
