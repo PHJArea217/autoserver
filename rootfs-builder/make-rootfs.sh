@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -eu
+mkdir -p /_autoserver
 docker build -t autoserver-rootfs - <<\EOF
 
 FROM ubuntu:20.04
@@ -43,4 +44,4 @@ lxc-utils grub-pc-bin grub-efi-amd64-bin grub2-common
 
 RUN mv /lib/systemd/system /lib/systemd/system_dist && mkdir /lib/systemd/system
 EOF
-docker run --rm -v /docker-buildout/autoserver2:/build-output autoserver-rootfs sh -c 'bsdtar -czf - /etc /usr /var > /build-output/rootfs.tar.gz'
+docker run --rm -v /_autoserver/system-img:/build-output autoserver-rootfs sh -c 'bsdtar -czf - /etc /usr /var > /build-output/rootfs.tar.gz'
