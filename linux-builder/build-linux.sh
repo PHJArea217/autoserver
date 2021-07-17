@@ -4,7 +4,7 @@ set -eu
 
 KERN_VERSION=5.12.14
 KERN_SHASUM=90ca3b98088f5d9af097067e04b195ecf0d4fe167bcfaca8a97b142bccb27dac
-mkdir -p build_root/kernel-output
+mkdir -p build_out/kernel-output build_root
 [ ! -f linux.tar.xz ] && wget -O linux.tar.xz https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$KERN_VERSION".tar.xz
 if sha256sum linux.tar.xz | grep -q "^$KERN_SHASUM "; then
 	:
@@ -21,8 +21,9 @@ set -eux
 hostname autoserver
 ip link set lo up
 mount -t tmpfs -o mode=0755 none /proc/driver
-mkdir /proc/driver/build_root
+mkdir /proc/driver/build_root /proc/driver/build_out
 mount --rbind build_root /proc/driver/build_root
+mount --rbind build_out /proc/driver/build_out
 cd /proc/driver
 mkdir -p dev/pts dev/shm dev/mqueue etc/alternatives proc root run sys tmp usr var
 mount --rbind /etc/alternatives etc/alternatives
@@ -55,7 +56,8 @@ if [ "1" = "${DO_SHELL:-0}" ]; then
 	exec sh -c 'exec /bin/bash </dev/tty'
 	exit 1
 fi
-exec sh -c 'cd /build_root && make olddefconfig && make -j 5 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_root/kernel-output modules_install && \
-make INSTALL_HDR_PATH=/build_root/kernel-output/usr headers_install && rm -f kernel-output/lib/modules/*/source kernel-output/lib/modules/*/build && \
-mksquashfs /build_root/kernel-output/usr /build_root/kernel-output/lib/modules /build_root/kernel-output/k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend -all-root'
+exec sh -c 'cd /build_root && make olddefconfig && make -j 5 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_out/kernel-output modules_install && \
+make INSTALL_HDR_PATH=/build_out/kernel-output/usr headers_install && rm -f /build_out/kernel-output/lib/modules/*/source /build_out/kernel-output/lib/modules/*/build && \
+mksquashfs /build_out/kernel-output/usr /build_out/kernel-output/lib/modules /build_out/k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend -all-root && \
+cp /build_root/arch/x86/boot/bzImage /build_out/vmlinuz && xz -ec < /build_root/System.map > /build_out/sysmap.xz'
 EOF
