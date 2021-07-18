@@ -25,6 +25,7 @@ docker run --rm -v /_autoserver/_ctr-script-build-output_2/matrix-synapse:/build
 docker run --rm -v /_autoserver/_ctr-script-build-output_2/mediawiki:/build_out --entrypoint= -u root ctr-script2-mediawiki /bin/sh -c 'tar c /bin /etc /lib /lib64 /sbin /usr /var > /build_out/rootfs.tar'
 docker run --rm -v /_autoserver/_ctr-script-build-output_2/node_js:/build_out --entrypoint= -u root ctr-script2-node /bin/sh -c 'tar c /bin /etc /lib /lib64 /sbin /usr /var > /build_out/rootfs.tar'
 docker run --rm -v /_autoserver/_ctr-script-build-output_2/certbot:/build_out --entrypoint= -u root certbot/certbot /bin/sh -c 'tar c /bin /etc /lib /opt /sbin /usr /var > /build_out/rootfs.tar'
+docker run --rm -v /_autoserver/_ctr-script-build-output_2/docker:/build_out --entrypoint= -u root docker:dind-rootless /bin/sh -c 'tar c /bin /etc /lib /opt /sbin /usr /var > /build_out/rootfs.tar'
 
 . ./common
 write_system 2 100000
