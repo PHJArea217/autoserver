@@ -30,5 +30,7 @@ apt-get -y install git gcc gcc-i686-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linu
 	libarchive-tools docker.io make bison flex build-essential busybox-static libelf-dev libssl-dev bc \
 	qemu-user-static rsync
 
+apt-get clean
+
 set +e
 echo 1 >| /proc/sys/kernel/unprivileged_userns_clone
