@@ -1,0 +1,13 @@
+1. Install qemu-system-x86_64 on the host system.
+2. Download the Debian unstable live cd from https://www.debian.org/ (not the net installer; look for the "standard" DVD ISO)
+3. Create a working virtual disk and start the VM:
+	fallocate -l 40G autoserver_disk.img
+	qemu-system-x86_64 -enable-kvm -m 6144 -drive file=autoserver_disk.img,format=raw -cdrom debian-11-[whatever]-standard.iso -boot d -smp 4 -cpu host
+
+Inside the virtual machine:
+1. Make a blank 40GB ext4 disk and mount it on /autoserver_disk
+2. Clone this git repository onto /autoserver_disk/git_repo
+3. Run the build-busybox-initramfs-linux script
+4. Run the script to build container modules
+5. Run the script to build system.img
+6. (TBD) Run the script to build the ISO image.
