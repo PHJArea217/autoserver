@@ -11,7 +11,8 @@ mkdir -p /_autoserver_out/extra_container_modules
 
 sh ../rootfs-builder/make-rootfs.sh </dev/null
 [ "regular file" = "`stat -c%F /_autoserver/system-img/rootfs.tar.gz`" ]
-ln -s /_autoserver/system-img/rootfs.tar.gz ../rootfs-builder/rootfs.tar.gz
+cp /_autoserver/system-img/rootfs.tar.gz ../rootfs-builder/rootfs.tar.gz
+rm -f /_autoserver/system-img/rootfs.tar.gz
 
 docker rmi autoserver-rootfs
 
