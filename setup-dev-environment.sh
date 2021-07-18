@@ -29,3 +29,6 @@ apt-get -y dist-upgrade
 apt-get -y install git gcc gcc-i686-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf squashfs-tools \
 	libarchive-tools docker.io make bison flex build-essential busybox-static libelf-dev libssl-dev bc \
 	qemu-user-static rsync
+
+set +e
+echo 1 >| /proc/sys/kernel/unprivileged_userns_clone
