@@ -17,8 +17,8 @@ bsdtar -xC busybox --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__bus
 # bsdtar -xC lib --strip-components 2 --no-fflags -f - < /proc/self/fd/3/libs.tar.gz _libs/i
 # bsdtar -xC socketbox --strip-components 1 --no-fflags -f /proc/self/fd/3/busybox.tar.gz _socketbox
 ln -s bin socketbox
-ln -s ../busybox/busybox-d bin/busybox-d
-ln -s ../busybox/busybox-s bin/busybox-s
+ln ../busybox/busybox-d bin/busybox-d
+ln ../busybox/busybox-s bin/busybox-s
 bsdtar -cf /_autoserver/_ctr-script-build-output_"$1"/_system/rootfs.tar .
 EOF
 }
