@@ -17,3 +17,5 @@ safe_cp iso-build/syslinux.cfg /_autoserver_out/as_boot/syslinux.cfg
 safe_cp initramfs-builder/rootfs/0_base.txz /_autoserver_out/autosvr/0_base.txz
 safe_cp rootfs-builder/system.img /_autoserver_out/autosvr/system.img
 safe_cp linux-builder/build_out/k_mod.img /_autoserver_out/autosvr/k_mod.img
+
+sha256sum /_autoserver_out/*/* > /_autoserver_out/sha256sums.txt

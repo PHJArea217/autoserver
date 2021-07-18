@@ -9,7 +9,7 @@ exec </dev/null
 run_unpriv sh build-busybox-initramfs-linux.sh
 sh extra-container-modules/make-all.sh
 run_unpriv sh -c 'cd rootfs-builder && exec sh build-rootfs.sh'
-sh install-files.sh
+sh install_files.sh
 
 # For audit/debug purposes
 docker images
