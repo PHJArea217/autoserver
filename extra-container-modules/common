@@ -63,6 +63,7 @@ for x in /_autoserver/_ctr-script-build-output_"$1"/*/rootfs.tar; do
 	cd /proc/driver
 done
 cd /
+chmod -R ugo-w /proc/driver
 mksquashfs /proc/driver /_autoserver/_ctr-script-build-output_"$1"/_output/mix-containers.squashfs -comp xz -b 1048576 -Xdict-size 100% -noappend
 EOF
 }
