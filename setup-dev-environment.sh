@@ -27,5 +27,4 @@ apt-get update
 apt-get -y dist-upgrade
 
 apt-get -y install git gcc gcc-i686-linux-gnu gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf squashfs-tools \
-	libarchive-tools docker.io make bison flex build-essential
-
+	libarchive-tools docker.io make bison flex build-essential busybox-static

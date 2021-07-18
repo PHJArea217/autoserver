@@ -50,8 +50,8 @@ mount -t sysfs none sys
 mount -t proc none proc
 
 export HOME=/root
-pivot_root . .
-umount -l .
+busybox pivot_root . .
+busybox umount -l .
 if [ "1" = "${DO_SHELL:-0}" ]; then
 	exec sh -c 'exec /bin/bash </dev/tty'
 	exit 1
