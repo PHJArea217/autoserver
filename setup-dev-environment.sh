@@ -2,10 +2,10 @@
 
 set -euC
 
-if [ ! -d /run/live ]; then
-	echo This script is meant to run only on the Debian Live DVD.
-	exit 1
-fi
+# if [ ! -d /run/live ]; then
+# 	echo This script is meant to run only on the Debian Live DVD.
+# 	exit 1
+# fi
 
 if [ ! -d /autoserver_disk ]; then
 	echo Please create a blank virtual HDD, format it as ext4,
@@ -13,7 +13,7 @@ if [ ! -d /autoserver_disk ]; then
 	exit 1
 fi
 mkdir -p /autoserver_disk/_autoserver /autoserver_disk/_out /autoserver_disk/docker /var/lib/docker /_autoserver /_autoserver_out /etc/docker
-mount --bind /autoserver_disk/docker /var/lib/docker
+# mount --bind /autoserver_disk/docker /var/lib/docker
 mount --bind /autoserver_disk/_out /_autoserver_out
 mount --bind /autoserver_disk/_autoserver /_autoserver
 printf '{"userns-remap": "default"}' > /etc/docker/daemon.json
