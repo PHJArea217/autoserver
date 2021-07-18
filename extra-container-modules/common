@@ -8,7 +8,7 @@ mount -t tmpfs -o mode=0755 none /proc/driver
 exec 3<../busybox-builder
 cd /proc/driver
 mkdir -p bin busybox src python-socketbox
-ln -s lib lib64
+# ln -s lib lib64
 bsdtar -xC bin --strip-components 2 --no-fflags -f - < /proc/self/fd/3/__ctr-scripts.tar.gz "$2"
 bsdtar -xC python-socketbox --strip-components 3 --no-fflags -f - < /proc/self/fd/3/__ctr-scripts.tar.gz "generic/python-socketbox"
 bsdtar -xC src --strip-components 1 --no-fflags -f - < /proc/self/fd/3/__c_sources.tar.gz __build_root_r
