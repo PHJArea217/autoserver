@@ -25,5 +25,6 @@ find usr/share/doc usr/share/man -type f -name '*.gz' -exec gunzip -- {} +
 )
 # bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xattrs --chroot -f "../linux-builder/build_root/linux-output.tar.gz" lib/modules
 # mv "$M_TMPDIR/lib/modules" "$M_TMPDIR/usr/lib/"
+chmod -R ugo-w "$M_TMPDIR"
 mksquashfs "$M_TMPDIR" system.img -noappend -comp xz -b 1048576 -Xdict-size 50%
 EOF
