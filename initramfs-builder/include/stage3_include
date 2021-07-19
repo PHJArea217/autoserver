@@ -46,7 +46,7 @@ fi
 
 if [ "1" = "${autoserver_cgroupv1_named:-1}" ]; then
 	/__autoserver__/ctrtool mount_seq -c /sys/fs/cgroup \
-		-m autoserver_user -Et cgroup -o none,name=autoserver_user,xattr
+		-m autoserver_user -Et cgroup -o none,name=autoserver_user,xattr \
 		-m systemd -Et cgroup -o none,name=systemd,xattr
 fi
 
