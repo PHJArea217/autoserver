@@ -58,6 +58,8 @@ if [ "1" = "${DO_SHELL:-0}" ]; then
 fi
 exec sh -c 'cd /build_root && make olddefconfig && make -j 5 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_out/kernel-output modules_install && \
 make INSTALL_HDR_PATH=/build_out/kernel-output/usr headers_install && rm -f /build_out/kernel-output/lib/modules/*/source /build_out/kernel-output/lib/modules/*/build && \
-mksquashfs /build_out/kernel-output/usr /build_out/kernel-output/lib/modules /build_out/k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend -all-root && \
+mv /build_out/kernel-output/lib/modules /build_out/kernel-output/modules && \
+chmod -R ugo-w /build_out/kernel-output && \
+mksquashfs /build_out/kernel-output /build_out/k_mod.img -comp xz -b 1048576 -Xdict-size 100% -Xbcj x86 -noappend -all-root && \
 cp /build_root/arch/x86/boot/bzImage /build_out/vmlinuz && xz -ec < /build_root/System.map > /build_out/sysmap.xz'
 EOF
