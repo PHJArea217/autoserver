@@ -11,6 +11,7 @@ bsdtar -xC "$M_TMPDIR" --no-acls --no-same-owner --no-same-permissions --no-xatt
 (
 set -eu
 cd "$M_TMPDIR"
+mkdir -p _upgrade
 for x in etc usr usr/lib usr/src usr/share usr/share/man usr/share/doc; do
 	[ "directory" = "$(stat -c%F "$x")" ]
 done
