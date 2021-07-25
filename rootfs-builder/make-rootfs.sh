@@ -33,7 +33,7 @@ rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc
 	/etc/unbound/*.pem /etc/unbound/*.key \
 	/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem /usr/bin/man /sbin/switch_root && \
 	rm -rf /var/lib/mysql && \
-	sh -c 'set -Ce; printf %s\\n "#!/bin/sh" :\ \$\{LESS=r\} "export LESS" "exec /static/busybox man "\"\$\@\" \
+	sh -c 'set -Ce; printf %s\\n "#!/bin/sh" :\ \$\{LESS=R\} "export LESS" "exec /static/busybox man "\"\$\@\" \
 	> /usr/bin/man' && chmod +x /usr/bin/man && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
 RUN env DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends linux-firmware build-essential make
