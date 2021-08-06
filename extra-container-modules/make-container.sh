@@ -57,7 +57,7 @@ RUN c_rehash /etc/ssl/certs && mkdir -p /lib64 && \\
 	update-alternatives --set ip6tables /usr/sbin/ip6tables-nft
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends php-ctype php-curl \\
-php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter
+php-dom php-iconv php-phar php-posix php-simplexml php-xmlwriter screen tmux
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends openssh-server openssh-client \\
 openssh-sftp-server git bind9 bind9utils dnsutils libarchive-tools xz-utils && rm -rf /etc/ssh/ssh_host_* /etc/bind/rndc.key
