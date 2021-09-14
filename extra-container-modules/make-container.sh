@@ -35,14 +35,14 @@ esac
 GITEA_VERSION=1.15.2
 
 mkdir -p tmp
-cp /usr/bin/qemu-arm-static /usr/bin/qemu-aarch64-static tmp/
+# cp /usr/bin/qemu-arm-static /usr/bin/qemu-aarch64-static tmp/
 cat > tmp/Dockerfile <<EOF
 FROM $BASE_IMAGE
-COPY qemu-arm-static qemu-aarch64-static /usr/bin/
+# COPY qemu-arm-static qemu-aarch64-static /usr/bin/
 RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates && \\
 sed -i 's#http://\\(archive\\|security\\)\\.ubuntu\\.com/#https://mirrors.edge.kernel.org/#g' /etc/apt/sources.list && apt-get update && apt-get -y dist-upgrade
 
-RUN dpkg-divert --add --no-rename /usr/bin/qemu-arm-static && dpkg-divert --add --no-rename /usr/bin/qemu-aarch64-static
+# RUN dpkg-divert --add --no-rename /usr/bin/qemu-arm-static && dpkg-divert --add --no-rename /usr/bin/qemu-aarch64-static
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends apt-utils htop less strace nginx-extras fcgiwrap apache2 python3 haproxy \\
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm \\

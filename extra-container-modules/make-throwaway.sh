@@ -6,6 +6,8 @@ mkdir -p /_autoserver
 docker build -t ctr-script-throwaway - <<\EOF
 FROM ubuntu:20.04
 RUN mkdir -p /usr/share/ca-certificates /usr/local/share/ca-certificates
+RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates && \
+sed -i 's#http://\(archive\|security\)\.ubuntu\.com/#https://mirrors.edge.kernel.org/#g' /etc/apt/sources.list && apt-get update && apt-get -y dist-upgrade
 RUN set -eu; \
 	rm -f /etc/dpkg/dpkg.cfg.d/excludes; \
 	export DEBIAN_FRONTEND=noninteractive; \
