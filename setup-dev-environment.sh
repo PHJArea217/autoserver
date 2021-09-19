@@ -17,11 +17,11 @@ mkdir -p /autoserver_disk/_autoserver /autoserver_disk/_out /autoserver_disk/doc
 mount --bind /autoserver_disk/_out /_autoserver_out
 mount --bind /autoserver_disk/_autoserver /_autoserver
 printf '{"userns-remap": "default"}' > /etc/docker/daemon.json
-cat > /etc/apt/sources.list.tmp <<\EOF
-deb https://deb.debian.org/debian bullseye main contrib
-deb-src https://deb.debian.org/debian bullseye main contrib
-EOF
-mv /etc/apt/sources.list.tmp /etc/apt/sources.list
+# cat > /etc/apt/sources.list.tmp <<\EOF
+# deb https://deb.debian.org/debian bullseye main contrib
+# deb-src https://deb.debian.org/debian bullseye main contrib
+# EOF
+# mv /etc/apt/sources.list.tmp /etc/apt/sources.list
 
 apt-get update
 apt-get -y dist-upgrade
