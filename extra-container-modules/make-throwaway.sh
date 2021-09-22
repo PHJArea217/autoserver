@@ -27,7 +27,7 @@ RUN set -eu; export DEBIAN_FRONTEND=noninteractive; \
 	xserver-xephyr zile wireshark wine mono-complete; \
 	rm -rf /etc/ssh /etc/bind/rndc.key /etc/ssl/private /etc/ssl/certs/ssl-cert-snakeoil.pem /var/lib/polkit-1/localauthority && ln -s /run/tb-config/ssh /etc/ssh; \
 	mv /usr/local /usr/_local && mkdir /usr/local && rm /etc/ssl/certs/ca-certificates.crt && dpkg-reconfigure ca-certificates
-RUN set -eu; export DEBIAN_FRONTEND=noninteractive; apt-get -y install imagemagick
+RUN set -eu; export DEBIAN_FRONTEND=noninteractive; apt-get -y install imagemagick; units_cur
 EOF
 docker run --rm -v /_autoserver/_ctr-script-build-output_4/throwaway:/build_out --entrypoint= -u root ctr-script-throwaway /bin/sh -c 'tar c /bin /etc /lib /lib64 /sbin /usr /var > /build_out/rootfs.tar'
 
