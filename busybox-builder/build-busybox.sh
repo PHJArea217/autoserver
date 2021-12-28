@@ -2,10 +2,10 @@
 
 set -eu
 
-bb_sha512='fb7e53a56c07b1098a12ee7232ad5401b147816648a0619b3b5358fdcf0915cfbb054500c0e0dd4acb3bc0a93a584b62bc5448e1f16b28004f58b39518a13b9d'
+bb_sha512='62b2e718b6669271380445ed6db249618d777a4e8d5e6d879fa39ffee43887b6a2e93ceef874c615c565ad492deb772b03a19b7475c403202741579fb151e16a'
 
 if [ ! -f __busybox.tar.bz2 ]; then
-	wget -O __busybox.tar.bz2.tmp https://www.busybox.net/downloads/busybox-1.34.1.tar.bz2
+	wget -O __busybox.tar.bz2.tmp https://www.busybox.net/downloads/busybox-1.35.0.tar.bz2
 	sha512sum __busybox.tar.bz2.tmp | grep -q "^$bb_sha512 "
 	mv __busybox.tar.bz2.tmp __busybox.tar.bz2
 fi
