@@ -28,7 +28,8 @@ printer-driver-gutenprint printer-driver-hpcups printer-driver-postscript-hp pro
 pulseaudio-utils python python3 qemu qemu-block-extra qemu-system qemu-user qemu-user-static qemu-utils radvd rsyslog \
 rtkit runc screen seabios sharutils socat sox squashfs-tools ssh-import-id strace sudo systemd thermald tmux \
 traceroute tshark u-boot-tools udev udisks2 unbound usb-modeswitch usbmuxd util-linux vim-nox vsftpd wamerican wget \
-wireless-regdb wireless-tools wodim wpasupplicant xserver-xorg-core xserver-xorg-input-all xserver-xorg-video-all xterm xxd xz-utils zsh && \
+wireless-regdb wireless-tools wodim wpasupplicant xserver-xorg-core xserver-xorg-input-all xserver-xorg-video-all \
+xterm xxd xz-utils zsh inotify-tools && \
 rm -f /sbin/init /usr/bin/vidir /etc/ssh/ssh_host_*_key* /etc/bind/rndc.key /etc/ssl/private/ssl-cert-snakeoil.key \
 	/etc/unbound/*.pem /etc/unbound/*.key \
 	/etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ssl-cert-snakeoil.pem /usr/bin/man /sbin/switch_root && \
