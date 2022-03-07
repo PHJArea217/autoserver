@@ -11,7 +11,7 @@ EOF
 
 docker build -t ctr-script7-node - <<\EOF
 FROM arm64v8/node:lts-slim
-RUN npm install -g express ip
+RUN npm install -g express ip axios
 EOF
 # docker run --rm -v /_autoserver/_ctr-script-build-output_2/matrix-synapse:/build_out --entrypoint= -u root matrixdotorg/synapse /bin/sh -c 'tar c /bin /conf /etc /lib /lib64 /sbin /start.py /usr /var > /build_out/rootfs.tar'
 docker run --rm -v /_autoserver/_ctr-script-build-output_7/mediawiki:/build_out --entrypoint= -u root ctr-script7-mediawiki /bin/sh -c 'tar c /bin /etc /lib /sbin /usr /var > /build_out/rootfs.tar'

@@ -46,6 +46,12 @@ rm -rf /_autoserver/_ctr-script-build-output_7
 
 docker rmi ctr-script7-mediawiki ctr-script7-node
 
+sh make-container-2-arm32.sh </dev/null
+cp /_autoserver/_ctr-script-build-output_8/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_2_arm32.sqf
+rm -rf /_autoserver/_ctr-script-build-output_8
+
+docker rmi ctr-script8-node
+
 sh make-throwaway.sh </dev/null
 cp /_autoserver/_ctr-script-build-output_4/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_4_amd64.sqf
 rm -rf /_autoserver/_ctr-script-build-output_4
