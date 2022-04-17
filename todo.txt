@@ -1,0 +1,7 @@
+Alternative-mode build script for:
+ - busybox/ctrtool
+ - all container modules except throwaway
+ - PowerDNS server (new container module)
+ - ARM32/ARM64 cross-compile environment, including things required for Linux kernel builds + Raspberry Pi Pico + Pico SDK + Pico-Examples + TinyUSB submodule (new container module)
+
+Change all Ubuntu container modules (including the autoserver system.img) to Debian
