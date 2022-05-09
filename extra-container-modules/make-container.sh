@@ -13,19 +13,19 @@ mkdir -p /_autoserver
 # RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends matrix-synapse-py3
 # EOF
 
-BASE_IMAGE=ubuntu:20.04
+BASE_IMAGE=debian:11
 GITEA_ARCH=amd64
 FILE_ARCH=amd64
 NR=1
 case "$T_ARCH" in
 	arm32)
-		BASE_IMAGE=arm32v7/ubuntu:20.04
+		BASE_IMAGE=arm32v7/debian:11
 		GITEA_ARCH=arm-6
 		FILE_ARCH=arm32
 		NR=5
 		;;
 	arm64)
-		BASE_IMAGE=arm64v8/ubuntu:20.04
+		BASE_IMAGE=arm64v8/debian:11
 		GITEA_ARCH=arm64
 		FILE_ARCH=aarch64
 		NR=6
@@ -40,7 +40,7 @@ cat > tmp/Dockerfile <<EOF
 FROM $BASE_IMAGE
 # COPY qemu-arm-static qemu-aarch64-static /usr/bin/
 RUN apt-get update && apt-get -y dist-upgrade && DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends wget apt-transport-https ca-certificates && \\
-sed -i 's#http://\\(archive\\|security\\)\\.ubuntu\\.com/#https://mirrors.edge.kernel.org/#g' /etc/apt/sources.list && apt-get update && apt-get -y dist-upgrade
+sed -i 's# http://# https://#g' /etc/apt/sources.list && apt-get update && apt-get -y dist-upgrade
 
 # RUN dpkg-divert --add --no-rename /usr/bin/qemu-arm-static && dpkg-divert --add --no-rename /usr/bin/qemu-aarch64-static
 
@@ -48,7 +48,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends ap
 postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm inotify-tools \\
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip libsasl2-modules \\
 qemu-user-static $([ "amd64" = "$GITEA_ARCH" ] && echo qemu-system-x86 || :) opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \\
-qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown python3-pygments rsyslog iptables wireguard-tools postfix-pcre && \\
+qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown python3-pygments rsyslog iptables wireguard-tools \\
+postfix-pcre iproute2 pdns-server pdns-backend-sqlite3 pdns-backend-remote && \\
 rm -rf /etc/ssl/private /etc/unbound/*.pem /etc/unbound/*.key /etc/ssl/certs/ca-certificates.crt /etc/docker/key.json \\
 /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 

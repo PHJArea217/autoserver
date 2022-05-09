@@ -9,12 +9,14 @@ esac
 
 mkdir -p /_autoserver_out/extra_container_modules
 
-sh ../rootfs-builder/make-rootfs.sh </dev/null
-[ "regular file" = "`stat -c%F /_autoserver/system-img/rootfs.tar.gz`" ]
-cp /_autoserver/system-img/rootfs.tar.gz ../rootfs-builder/rootfs.tar.gz
-rm -f /_autoserver/system-img/rootfs.tar.gz
+if ! [ "alt" = "$1" ]; then
+	sh ../rootfs-builder/make-rootfs.sh </dev/null
+	[ "regular file" = "`stat -c%F /_autoserver/system-img/rootfs.tar.gz`" ]
+	cp /_autoserver/system-img/rootfs.tar.gz ../rootfs-builder/rootfs.tar.gz
+	rm -f /_autoserver/system-img/rootfs.tar.gz
 
-docker rmi autoserver-rootfs
+	docker rmi autoserver-rootfs
+fi
 
 T_ARCH=amd64 sh make-container.sh </dev/null
 cp /_autoserver/_ctr-script-build-output_1/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_1_amd64.sqf
@@ -51,9 +53,11 @@ cp /_autoserver/_ctr-script-build-output_8/_output/mix-containers.squashfs /_aut
 rm -rf /_autoserver/_ctr-script-build-output_8
 
 docker rmi ctr-script8-node
+if [ "alt" = "$1" ]; then
+else
+	sh make-throwaway.sh </dev/null
+	cp /_autoserver/_ctr-script-build-output_4/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_4_amd64.sqf
+	rm -rf /_autoserver/_ctr-script-build-output_4
 
-sh make-throwaway.sh </dev/null
-cp /_autoserver/_ctr-script-build-output_4/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_4_amd64.sqf
-rm -rf /_autoserver/_ctr-script-build-output_4
-
-docker rmi ctr-script-throwaway
+	docker rmi ctr-script-throwaway
+fi

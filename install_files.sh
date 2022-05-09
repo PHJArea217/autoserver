@@ -10,12 +10,17 @@ safe_cp() {
 }
 
 mkdir -p /_autoserver_out/as_boot /_autoserver_out/autosvr
-safe_cp linux-builder/build_out/vmlinuz /_autoserver_out/as_boot/vmlinuz
+# if ! [ "alt" = "$1" ]; then
+	safe_cp linux-builder/build_out/vmlinuz /_autoserver_out/as_boot/vmlinuz
+	safe_cp linux-builder/build_out/k_mod.img /_autoserver_out/autosvr/k_mod.img
+	safe_cp linux-builder/build_out/sysmap.xz /_autoserver_out/as_boot/sysmap.xz
+	safe_cp iso-build/syslinux.cfg /_autoserver_out/as_boot/syslinux.cfg
+# fi
 safe_cp initramfs-builder/initrd.xz /_autoserver_out/as_boot/initrd.xz
-safe_cp linux-builder/build_out/sysmap.xz /_autoserver_out/as_boot/sysmap.xz
-safe_cp iso-build/syslinux.cfg /_autoserver_out/as_boot/syslinux.cfg
 safe_cp initramfs-builder/rootfs/0_base.txz /_autoserver_out/autosvr/0_base.txz
-safe_cp rootfs-builder/system.img /_autoserver_out/autosvr/system.img
-safe_cp linux-builder/build_out/k_mod.img /_autoserver_out/autosvr/k_mod.img
+
+if ! [ "alt" = "$1" ]; then
+	safe_cp rootfs-builder/system.img /_autoserver_out/autosvr/system.img
+fi
 
 sha256sum -b /_autoserver_out/*/* > /_autoserver_out/sha256sums.txt
