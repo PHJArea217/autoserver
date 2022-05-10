@@ -54,6 +54,11 @@ rm -rf /_autoserver/_ctr-script-build-output_8
 
 docker rmi ctr-script8-node
 if [ "alt" = "$1" ]; then
+	sh make-build-ctr.sh </dev/null
+	cp /_autoserver/_ctr-script-build-output_9/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_5_amd64.sqf
+	rm -rf /_autoserver/_ctr-script-build-output_9
+
+	docker rmi ctr-script-build
 else
 	sh make-throwaway.sh </dev/null
 	cp /_autoserver/_ctr-script-build-output_4/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_4_amd64.sqf
