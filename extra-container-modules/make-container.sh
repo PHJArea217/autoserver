@@ -45,7 +45,7 @@ sed -i 's# http://# https://#g' /etc/apt/sources.list && apt-get update && apt-g
 # RUN dpkg-divert --add --no-rename /usr/bin/qemu-arm-static && dpkg-divert --add --no-rename /usr/bin/qemu-aarch64-static
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends apt-utils htop less strace nginx-extras fcgiwrap apache2 python3 haproxy \\
-postfix dovecot-imapd fetchmail spamassassin busybox-static mysql-client mysql-server libapache2-mod-php php-fpm inotify-tools \\
+postfix dovecot-imapd fetchmail spamassassin busybox-static default-mysql-client default-mysql-server libapache2-mod-php php-fpm inotify-tools \\
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip libsasl2-modules \\
 qemu-user-static $([ "amd64" = "$GITEA_ARCH" ] && echo qemu-system-x86 || :) opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \\
 qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown python3-pygments rsyslog iptables wireguard-tools \\
