@@ -2,8 +2,8 @@
 
 set -eu
 
-KERN_VERSION=5.17.3
-KERN_SHASUM='32d0a8e366b87e1cbde951b9f7a01287546670ba60fac35cccfc8a7c005a162c'
+KERN_VERSION=5.17.8
+KERN_SHASUM='117961d8c75178d386b0aac1dee2e34046eee7f6f075a4c2be6ac10c4324236a'
 mkdir -p build_out/kernel-output build_root
 [ ! -f linux.tar.xz ] && wget -O linux.tar.xz https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-"$KERN_VERSION".tar.xz
 if sha256sum linux.tar.xz | grep -q "^$KERN_SHASUM "; then
