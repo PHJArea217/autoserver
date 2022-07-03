@@ -49,7 +49,7 @@ postfix dovecot-imapd fetchmail spamassassin busybox-static default-mysql-client
 pulseaudio php-gd php-imagick php-intl php-json php-mbstring php-mysql php-pgsql php-sqlite3 php-xml php-zip libsasl2-modules \\
 qemu-user-static $([ "amd64" = "$GITEA_ARCH" ] && echo qemu-system-x86 || :) opendkim opendkim-tools geoip-database gnupg libfcgi-bin ovmf dnsmasq-base unbound \\
 qemu-utils sa-compile shared-mime-info spamc curl cgit python3-markdown python3-pygments rsyslog iptables wireguard-tools \\
-postfix-pcre iproute2 pdns-server pdns-backend-sqlite3 pdns-backend-remote && \\
+postfix-pcre iproute2 pdns-server pdns-backend-sqlite3 pdns-backend-remote acl net-tools && \\
 rm -rf /etc/ssl/private /etc/unbound/*.pem /etc/unbound/*.key /etc/ssl/certs/ca-certificates.crt /etc/docker/key.json \\
 /etc/ssl/certs/ssl-cert-snakeoil.pem && DEBIAN_FRONTEND=noninteractive dpkg-reconfigure ca-certificates
 
