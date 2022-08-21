@@ -1,5 +1,6 @@
 #!/bin/sh
 set -eu
+mkdir -p disk
 mount -t ext4 -o nosuid,nodev,nosymfollow "$1" disk
-rm disk/sbin/init
+rm disk/usr/sbin/init
 mkdir disk/autoserver_repos
