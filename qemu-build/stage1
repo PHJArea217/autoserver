@@ -10,6 +10,7 @@ if sha512sum debian.tar.xz | grep "^$CLOUDIMG_SHA512SUM "; then
 	:
 else
 	echo >&2 'Incorrect checksum'
+	exit 1
 fi
-bsdtar -xOf debian.tar.xz disk_raw.img
+bsdtar -xOf debian.tar.xz disk.raw > disk_raw.img
 truncate -s 40G disk_raw.img
