@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -eu
+
+CLOUDIMG_VERSION=20220816-1109
+CLOUDIMG_SHA512SUM='570adc68b3bde4cfe55adcc4cb389ac2c0ac73222b0c754268af5feec1fb37f01d7b8a94205a5e37fc3efd48614a1a29bba837c58406a86500b3b1998cc0b0eb'
+
+wget -O debian.tar.xz "https://cloud.debian.org/images/cloud/bullseye/$CLOUDIMG_VERSION/debian-11-generic-amd64-$CLOUDIMG_VERSION.tar.xz"
+if sha512sum debian.tar.xz | grep "^$CLOUDIMG_SHA512SUM "; then
+	:
+else
+	echo >&2 'Incorrect checksum'
+fi
+bsdtar -xOf debian.tar.xz disk_raw.img
+truncate -s 40G disk_raw.img
