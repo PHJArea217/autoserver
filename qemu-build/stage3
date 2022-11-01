@@ -33,6 +33,6 @@ cat > disk/etc/rc.local <<\EOF
 set -eu
 sleep 10
 echo 0 > /sys/fs/cgroup/init.scope/cgroup.procs
-exec setsid sh -c 'exec /etc/rc.local2 < /dev/null > /dev/tty10 2>&1'
+exec setsid -f sh -c 'exec /etc/rc.local2 < /dev/null > /dev/tty10 2>&1'
 EOF
 chmod +x disk/etc/rc.local
