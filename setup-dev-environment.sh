@@ -16,7 +16,7 @@ mkdir -p /autoserver_disk/_autoserver /autoserver_disk/_out /autoserver_disk/doc
 # mount --bind /autoserver_disk/docker /var/lib/docker
 mount --bind /autoserver_disk/_out /_autoserver_out
 mount --bind /autoserver_disk/_autoserver /_autoserver
-printf '{"userns-remap": "default"}' > /etc/docker/daemon.json
+printf '{"userns-remap": "default"}' > /etc/docker/daemon.json || exit 0
 # cat > /etc/apt/sources.list.tmp <<\EOF
 # deb https://deb.debian.org/debian bullseye main contrib
 # deb-src https://deb.debian.org/debian bullseye main contrib

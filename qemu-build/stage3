@@ -16,6 +16,7 @@ chvt 10
 if [ -f /2nd_boot ]; then
 	chmod -x /etc/rc.local
 	cd /autoserver_repos/autoserver
+	sh setup-dev-environment.sh # bind mount again
 	env SUDO_UID="`id -u build-user`" SUDO_GID="`id -g build-user`" script -T times.txt -c 'sh build-all.sh </dev/null' log.txt </dev/null
 	poweroff
 else
