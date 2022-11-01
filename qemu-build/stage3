@@ -4,3 +4,34 @@ mkdir -p disk
 mount -t ext4 -o nosuid,nodev,noexec,nosymfollow "$1" disk
 rm disk/usr/sbin/init
 mkdir disk/autoserver_repos
+for repo in autoserver container-scripts python-socketbox socketbox; do
+	git clone "$2/$repo" "disk/autoserver_repos/$repo"
+done
+
+set -C
+cat > disk/etc/rc.local2 <<\EOF
+#!/bin/sh
+set -eu
+if [ -f /2nd_boot ]; then
+	chmod -x /etc/rc.local
+	cd /autoserver_repos/autoserver
+	env SUDO_UID="`id -u build-user`" SUDO_GID="`id -g build-user`" script -T times.txt -c 'sh build-all.sh </dev/null' log.txt </dev/null
+	poweroff
+else
+	adduser --group --system build-user
+	mkdir /autoserver_disk
+	cd /autoserver_repos/autoserver
+	sh setup-dev-environment.sh
+	touch /2nd_boot
+	reboot
+fi
+EOF
+chmod +x disk/etc/rc.local2
+cat > disk/etc/rc.local <<\EOF
+#!/bin/sh
+set -eu
+sleep 10
+echo 0 > /sys/fs/cgroup/init.scope/cgroup.procs
+exec setsid sh -c 'exec /etc/rc.local2 < /dev/null > /dev/tty10 2>&1'
+EOF
+chmod +x disk/etc/rc.local
