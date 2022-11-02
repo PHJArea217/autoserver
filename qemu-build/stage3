@@ -2,7 +2,7 @@
 set -eu
 mkdir -p disk
 mount -t ext4 -o nosuid,nodev,noexec,nosymfollow "$1" disk
-rm disk/usr/sbin/init
+# rm disk/usr/sbin/init
 mkdir disk/autoserver_repos
 for repo in autoserver container-scripts python-socketbox socketbox; do
 	git clone "$2/$repo" "disk/autoserver_repos/$repo"
