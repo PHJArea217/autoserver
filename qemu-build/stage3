@@ -12,7 +12,7 @@ set -C
 cat > disk/etc/rc.local2 <<\EOF
 #!/bin/sh
 set -eu
-chvt 10 || :
+busybox chvt 10 || :
 if [ -f /2nd_boot ]; then
 	chmod -x /etc/rc.local
 	cd /autoserver_repos/autoserver
