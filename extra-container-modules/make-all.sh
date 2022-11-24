@@ -61,9 +61,9 @@ if [ "alt" = "$1" ]; then
 	docker rmi ctr-script-build
 else
 	true
-	# sh make-throwaway.sh </dev/null
-	# cp /_autoserver/_ctr-script-build-output_4/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_4_amd64.sqf
-	# rm -rf /_autoserver/_ctr-script-build-output_4
+	sh make-throwaway.sh </dev/null
+	cp /_autoserver/_ctr-script-build-output_4/_output/mix-containers.squashfs /_autoserver_out/extra_container_modules/mix_4_amd64.sqf
+	rm -rf /_autoserver/_ctr-script-build-output_4
 
-	# docker rmi ctr-script-throwaway
+	docker rmi ctr-script-throwaway
 fi
