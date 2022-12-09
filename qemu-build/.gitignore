@@ -1,3 +1,5 @@
+*.iso
 /disk
 /disk_raw.img
 /debian.tar.xz
+/iso*
