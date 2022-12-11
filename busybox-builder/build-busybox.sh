@@ -18,10 +18,16 @@ fi
 touch __build_root_r/_busybox_done
 
 # If you're not part of the peterjin.org network, change the second line below to https://git2.peterjin.org to use our public Git server instead.
-sh -c 'set -eu; cd __build_root_r; for x in socketbox container-scripts python-socketbox; do [ ! -d "$x"/.git ] && git clone --no-checkout "$1"/"$x"; done; exit 0' _ \
+sh -c 'set -eu; cd __build_root_r; for x in socketbox container-scripts python-socketbox ctrtool-containers ctrtool-config_tars socket-enhancer universal-relay; do [ ! -d "$x"/.git ] && git clone --no-checkout "$1"/"$x"; done; exit 0' _ \
 	/autoserver_repos
 
-bsdtar -czf __c_sources.tar.gz --uid 0 --gid 0 __build_root_r/container-scripts __build_root_r/socketbox
+bsdtar -czf __c_sources.tar.gz --uid 0 --gid 0 \
+	__build_root_r/container-scripts \
+	__build_root_r/ctrtool-containers \
+	__build_root_r/ctrtool-config_tars \
+	__build_root_r/socket-enhancer \
+	__build_root_r/universal-relay \
+	__build_root_r/socketbox
 
 script -c 'exec unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave setsid sh' __build.log <<\EOF
 set -eux
