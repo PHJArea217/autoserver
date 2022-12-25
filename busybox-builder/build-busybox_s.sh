@@ -38,9 +38,9 @@ make -C socketbox_arm32 CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar CFL
 
 mkdir /bin_out_a /bin_out_a/amd64 /bin_out_a/aarch64 /bin_out_a/arm32 /bin_out_a/generic
 
-strip -o /bin_out_a/amd64/ctrtool ctr-scripts_x86/ctrtool/ctrtool
-strip -o /bin_out_a/amd64/ctrtool-static ctr-scripts_x86/ctrtool/ctrtool-static
-strip -o /bin_out_a/amd64/bind-anywhere.so ctr-scripts_x86/bind-anywhere/bind-anywhere.so
+x86_64-linux-gnu-strip -o /bin_out_a/amd64/ctrtool ctr-scripts_x86/ctrtool/ctrtool
+x86_64-linux-gnu-strip -o /bin_out_a/amd64/ctrtool-static ctr-scripts_x86/ctrtool/ctrtool-static
+x86_64-linux-gnu-strip -o /bin_out_a/amd64/bind-anywhere.so ctr-scripts_x86/bind-anywhere/bind-anywhere.so
 
 aarch64-linux-gnu-strip -o /bin_out_a/aarch64/ctrtool ctr-scripts_arm/ctrtool/ctrtool
 aarch64-linux-gnu-strip -o /bin_out_a/aarch64/ctrtool-static ctr-scripts_arm/ctrtool/ctrtool-static
@@ -51,7 +51,7 @@ arm-linux-gnueabihf-strip -o /bin_out_a/arm32/ctrtool-static ctr-scripts_arm32/c
 arm-linux-gnueabihf-strip -o /bin_out_a/arm32/bind-anywhere.so ctr-scripts_arm32/bind-anywhere/bind-anywhere.so
 
 for x in libsocketbox-preload.so socket-query socketbox socketbox-inetd socketbox-inetd-p socketbox-relay send-receive-fd; do
-	strip -o /bin_out_a/amd64/"$x" socketbox_x86/"$x"
+	x86_64-linux-gnu-strip -o /bin_out_a/amd64/"$x" socketbox_x86/"$x"
 	aarch64-linux-gnu-strip -o /bin_out_a/aarch64/"$x" socketbox_arm/"$x"
 	arm-linux-gnueabihf-strip -o /bin_out_a/arm32/"$x" socketbox_arm32/"$x"
 done
