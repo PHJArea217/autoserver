@@ -32,7 +32,7 @@ case "$T_ARCH" in
 		;;
 esac
 
-GITEA_VERSION=1.17.3
+GITEA_VERSION='1.18.3'
 
 mkdir -p tmp
 # cp /usr/bin/qemu-arm-static /usr/bin/qemu-aarch64-static tmp/
