@@ -22,6 +22,7 @@ touch __build_root_r/_busybox_done
 sh -c 'set -eu; cd __build_root_r; for x in autoserver autoserver-appliances socketbox container-scripts python-socketbox ctrtool-containers ctrtool-config_tars socket-enhancer universal-relay; do [ ! -d "$x"/refs ] && git clone --mirror "$1"/"$x"; done; exit 0' _ \
 	/autoserver_repos
 
+for x in __build_root_r/*.git; do mv "$x" "${x%%.git}"; done
 bsdtar -czf __c_sources.tar.gz --uid 0 --gid 0 \
 	__build_root_r/autoserver \
 	__build_root_r/autoserver-appliances \
