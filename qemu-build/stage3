@@ -22,6 +22,7 @@ if [ -f /2nd_boot ]; then
 	poweroff
 else
 	adduser --group --system build-user
+	echo 'root:autoserver' | chpasswd
 	mkdir /autoserver_disk
 	cd /autoserver_repos/autoserver
 	sh setup-dev-environment.sh
