@@ -56,7 +56,7 @@ if [ "1" = "${DO_SHELL:-0}" ]; then
 	exec sh -c 'exec /bin/bash </dev/tty'
 	exit 1
 fi
-exec sh -c 'cd /build_root && make olddefconfig && make -j 5 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_out/kernel-output modules_install && \
+exec sh -c 'cd /build_root && make olddefconfig && make -j 18 && make INSTALL_MOD_STRIP=1 INSTALL_MOD_PATH=/build_out/kernel-output modules_install && \
 make INSTALL_HDR_PATH=/build_out/kernel-output/usr headers_install && rm -f /build_out/kernel-output/lib/modules/*/source /build_out/kernel-output/lib/modules/*/build && \
 mv /build_out/kernel-output/lib/modules /build_out/kernel-output/modules && \
 chmod -R ugo-w /build_out/kernel-output && \

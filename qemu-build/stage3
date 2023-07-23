@@ -18,7 +18,7 @@ if [ -f /2nd_boot ]; then
 	cd /autoserver_repos/autoserver
 	chown -R 'build-user:build-user' .
 	sh setup-dev-environment.sh # bind mount again
-	env SUDO_UID="`id -u build-user`" SUDO_GID="`id -g build-user`" script -T times.txt -c 'sh build-all.sh </dev/null' log.txt </dev/null
+	env SUDO_UID="`id -u build-user`" SUDO_GID="`id -g build-user`" script -T times.txt -c 'sh build-alt.sh </dev/null' log.txt </dev/null
 	poweroff
 else
 	adduser --group --system build-user
