@@ -2,10 +2,9 @@
 
 set -eu
 
-CLOUDIMG_VERSION='20230124-1270'
-CLOUDIMG_SHA512SUM='aadbc6a551e58318c6ecb34ef03caf125e056a8b74e87e04cb04cc0614086b861cff52e29565de4f2b51cae983fe38c42ab04cacf9099e2b5714689c31a6283e'
-
-wget -O debian.tar.xz "https://cloud.debian.org/images/cloud/bullseye/$CLOUDIMG_VERSION/debian-11-generic-amd64-$CLOUDIMG_VERSION.tar.xz"
+CLOUDIMG_VERSION='20230711-1438'
+CLOUDIMG_SHA512SUM='c812ed7607fd4e0ef34f4e2cc9d3903a0b7883252bc902bfb3da7786b8ae3668ad65009056f22fc503bedc63a2419b2feffb84a3d62dccb13ff84fb065ab48cb'
+wget -O debian.tar.xz "https://cloud.debian.org/images/cloud/bookworm/$CLOUDIMG_VERSION/debian-12-generic-amd64-$CLOUDIMG_VERSION.tar.xz"
 if sha512sum debian.tar.xz | grep "^$CLOUDIMG_SHA512SUM "; then
 	:
 else
