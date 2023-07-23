@@ -30,16 +30,17 @@ else
 fi
 EOF
 chmod +x disk/etc/rc.local2
-cat > disk/etc/rc.local <<\EOF
+cat > disk/etc/rc.local <<\EOF0
 #!/bin/sh
 set -eu
 ip addr add '10.0.2.15/24' dev ens3
 ip link set ens3 up
 ip route add 0.0.0.0/0 via 10.0.2.2
 # echo nameserver 10.0.2.3 > /etc/resolv.conf
-resolvectl dns ens3 10.0.2.3
 sleep 10
+resolvectl dns ens3 10.0.2.3
+sleep 2
 echo 0 > /sys/fs/cgroup/init.scope/cgroup.procs
 exec setsid -f sh -c 'exec /etc/rc.local2 < /dev/null > /dev/tty10 2>&1'
-EOF
+EOF0
 chmod +x disk/etc/rc.local
