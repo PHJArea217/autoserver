@@ -2,8 +2,8 @@
 
 set -eu
 
-bb_version='1.36.0'
-bb_sha512='1c203b6408154c4a44b8b126b49f9a131614d8fe48656992fccf3c315d56f54335bb1f8e6a1d4202b59d01152fd886277f7f13935c058d9bf9e07f1ee783a2da'
+bb_version='1.36.1'
+bb_sha512='8c0c754c9ae04b5e6b23596283a7d3a4ef96225fe179f92d6f6a99c69c0caa95b1aa56c267f52d7c807f6cc69e1f0b7dd29a8ac624098f601738f8c0c57980d4'
 
 if [ ! -f __busybox.tar.bz2 ]; then
 	wget -O __busybox.tar.bz2.tmp https://www.busybox.net/downloads/busybox-"$bb_version".tar.bz2
@@ -19,7 +19,7 @@ fi
 touch __build_root_r/_busybox_done
 
 # If you're not part of the peterjin.org network, change the second line below to https://git2.peterjin.org to use our public Git server instead.
-sh -c 'set -eu; cd __build_root_r; for x in autoserver autoserver-appliances socketbox container-scripts python-socketbox ctrtool-containers ctrtool-config_tars socket-enhancer universal-relay; do [ ! -d "$x"/refs ] && git clone --mirror "$1"/"$x"; done; exit 0' _ \
+sh -c 'set -eu; cd __build_root_r; for x in autoserver autoserver-appliances socketbox container-scripts python-socketbox ctrtool-containers ctrtool-config_tars socket-enhancer universal-relay u-relay-tproxy; do [ ! -d "$x"/refs ] && git clone --mirror "$1"/"$x"; done; exit 0' _ \
 	/autoserver_repos
 
 for x in __build_root_r/*.git; do mv "$x" "${x%%.git}"; done
@@ -31,6 +31,7 @@ bsdtar -czf __c_sources.tar.gz --uid 0 --gid 0 \
 	__build_root_r/ctrtool-config_tars \
 	__build_root_r/socket-enhancer \
 	__build_root_r/universal-relay \
+	__build_root_r/u-relay-tproxy \
 	__build_root_r/socketbox
 
 script -c 'exec unshare -r -m -i -u -p -n --fork --mount-proc --propagation=slave setsid sh' __build.log <<\EOF

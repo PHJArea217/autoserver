@@ -4,7 +4,7 @@ mkdir -p disk
 mount -t ext4 -o nosuid,nodev,noexec,nosymfollow "$1" disk
 # rm disk/usr/sbin/init
 mkdir disk/autoserver_repos
-for repo in autoserver autoserver-appliances container-scripts python-socketbox socketbox ctrtool-containers ctrtool-config_tars socket-enhancer universal-relay; do
+for repo in autoserver autoserver-appliances container-scripts python-socketbox socketbox ctrtool-containers ctrtool-config_tars socket-enhancer universal-relay u-relay-tproxy; do
 	git clone "$2/$repo" "disk/autoserver_repos/$repo"
 done
 

@@ -2,8 +2,8 @@
 
 set -eu
 
-CLOUDIMG_VERSION='20230711-1438'
-CLOUDIMG_SHA512SUM='c812ed7607fd4e0ef34f4e2cc9d3903a0b7883252bc902bfb3da7786b8ae3668ad65009056f22fc503bedc63a2419b2feffb84a3d62dccb13ff84fb065ab48cb'
+CLOUDIMG_VERSION='20230802-1460'
+CLOUDIMG_SHA512SUM='64aeb3a531561c6f470f6cd1831ec232eff10fc41926fba3f77c80e6b449acb44b78f9d0273687b452f595df888eab0033e4a02f27d8dc117b73bbde68d5192b'
 wget -O debian.tar.xz "https://cloud.debian.org/images/cloud/bookworm/$CLOUDIMG_VERSION/debian-12-generic-amd64-$CLOUDIMG_VERSION.tar.xz"
 if sha512sum debian.tar.xz | grep "^$CLOUDIMG_SHA512SUM "; then
 	:
