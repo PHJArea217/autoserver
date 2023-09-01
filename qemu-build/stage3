@@ -1,6 +1,7 @@
 #!/bin/sh
 set -eu
 mkdir -p disk
+resize2fs "$1"
 mount -t ext4 -o nosuid,nodev,noexec,nosymfollow "$1" disk
 # rm disk/usr/sbin/init
 mkdir disk/autoserver_repos

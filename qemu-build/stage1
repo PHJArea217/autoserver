@@ -13,3 +13,4 @@ else
 fi
 bsdtar -xOf debian.tar.xz disk.raw > disk_raw.img
 truncate -s 40G disk_raw.img
+growpart disk_raw.img 1
